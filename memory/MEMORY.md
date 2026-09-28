@@ -1,0 +1,2 @@
+- [Site WordPress OVH](site-wordpress-ovh.md) — ctarchitectedinterieur.fr, accès SFTP, état et outils
+- [Workflow git du site](workflow-git-site.md) — commit + push GitHub à chaque mise à jour, mémoire incluse

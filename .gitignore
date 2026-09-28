@@ -1,0 +1,15 @@
+# Fichiers de diagnostic téléchargés ponctuellement
+audit/
+
+# Secrets et sauvegardes (ne jamais versionner)
+*.netrc
+.ovh_netrc
+wp-config.php
+*.wpress
+*.sql
+*.sql.gz
+
+# Médias (trop lourds pour git, sauvegardés à part)
+site/wp-content/uploads/
+site/wp-content/cache/
+site/wp-content/litespeed/
