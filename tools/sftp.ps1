@@ -1,4 +1,4 @@
-# Exécute des commandes WinSCP sur l'hébergement OVH (SFTP).
+﻿# Exécute des commandes WinSCP sur l'hébergement OVH (SFTP).
 # Usage : .\tools\sftp.ps1 "ls /home/ctarchq/www" "get /home/ctarchq/www/wp-config.php C:\tmp\"
 # Le mot de passe est lu dans ~/.ovh_netrc (jamais écrit dans les commandes ni affiché).
 param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Commands)
