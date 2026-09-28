@@ -1,3 +1,4 @@
 - [Site WordPress OVH](site-wordpress-ovh.md) — ctarchitectedinterieur.fr, accès SFTP, état et outils
 - [Workflow git du site](workflow-git-site.md) — commit + push GitHub à chaque mise à jour, mémoire incluse
+- [Reprise maintenance](reprise-maintenance.md) — où reprendre le chantier (WPForms à relancer, cookies, Astra, PHP)
 - [Délégation gestion du site](delegation-gestion-site.md) — gérer le site sans lui demander, sauf dépenses/contrats/suppressions/design
