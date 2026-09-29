@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T11:12:17.910Z
+  modified: 2026-09-29T11:18:05.373Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -24,6 +24,9 @@ Search Console validée le 2026-09-29 (propriété préfixe d'URL). Pages vides 
 
 Fiche Google Business (2026-09-29) : description réécrite collée, catégorie secondaire « Décorateur d'intérieur », 11 zones desservies (Ouest lyonnais + Villefranche/Gleizé/Anse…), flyer + photo portrait ajoutés. CFAI : lien vers le site OK. LinkedIn : site + contact OK. Travaux.com refuse tout lien externe (normal, rien à faire). camillethomas.fr N'EST PAS elle (homonyme concurrent, ne jamais sous-entendre le contraire).
 À LUI RAPPELER quand les pages du site seront finies : revenir sur la fiche Google pour ajouter les photos avant/après des meilleures réalisations, les prestations (via « Éditer produits »), et un premier post.
+
+E-mails : réception CONFIRMÉE par elle le 2026-09-29 (test + vrai envoi formulaire, instantané). Favicon installé (site_icon=203, symbole du logo recadré, source `docs/images/ct-favicon-512.png`).
+Demande en attente de décision : pièces jointes (photos/docs/PDF) dans le formulaire — non disponible dans WPForms Lite (champ File Upload = Pro payant). Options proposées : WPForms Pro (payant), ou remplacer le formulaire par une extension gratuite qui gère les fichiers, ou inviter à envoyer les fichiers en réponse à l'e-mail.
 
 Proposé, pas fait : supprimer l'ancienne sauvegarde ai1wm de mai 2026 (274 Mo, `wp-content/ai1wm-backups/`) — attendre son accord.
 
