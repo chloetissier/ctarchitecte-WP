@@ -43,6 +43,27 @@ add_action('wp_head', function () {
 .ct-apropos .ct-accroche{font-size:16px;margin:12px 0 36px}
 .ct-apropos .ct-accroche strong{font-family:'Benedict',cursive;font-weight:400;font-size:1.45em;line-height:1;color:#382A25}
 .ct-apropos .wp-block-kadence-rowlayout{margin:0 0 24px!important;border-radius:30px;overflow:hidden}
+.ct-presta{color:#382A25;font-size:16px;line-height:1.7}
+.ct-presta h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 24px}
+.ct-presta .ct-presta-intro{font-size:18px;margin-bottom:10px}
+.ct-presta p{margin-bottom:16px}
+.ct-presta .ct-forfait{border-top:3px solid #A8B2A1;padding-top:36px;margin-top:48px}
+.ct-presta h2{font-family:'Montserrat',sans-serif;font-weight:600;font-size:22px;color:#843A45;margin:0 0 10px}
+.ct-presta h3{font-family:'Montserrat',sans-serif;font-weight:600;font-size:18px;color:#382A25;margin:28px 0 10px}
+.ct-presta h2 + h3{margin-top:4px}
+.ct-presta .ct-etape{display:inline-block;margin-right:10px;padding:2px 12px;border:2px solid #A8B2A1;border-radius:30px;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;vertical-align:2px}
+.ct-presta ul{padding-left:20px;margin:0 0 16px}
+.ct-presta li{margin:6px 0}
+.ct-presta li::marker{color:#A8B2A1}
+.ct-presta .ct-conclusion{color:#843A45;font-weight:600;margin-top:18px}
+.ct-presta .ct-bande{background:#E7E1DC;border-radius:30px;padding:32px 36px;margin-top:56px}
+.ct-presta .ct-bande .wp-block-columns{gap:48px;margin:0}
+.ct-presta .ct-bande h2{font-size:20px}
+.ct-presta .ct-bande ul{margin-bottom:12px}
+.ct-presta .ct-bande + .ct-rdv{border-top:0;margin-top:40px;padding-top:0}
+.ct-presta a{color:#843A45}
+.ct-presta + .ct-faq-fin{margin-top:40px}
+@media (max-width:781px){.ct-presta h1{font-size:24px}.ct-presta .ct-bande{padding:24px 20px}.ct-presta .ct-bande .wp-block-columns{gap:8px}}
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}
 </style>
