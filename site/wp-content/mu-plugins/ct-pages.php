@@ -25,7 +25,9 @@ add_action('wp_head', function () {
 .ct-faq li::marker{color:#A8B2A1}
 .ct-faq p:last-child{margin-bottom:28px}
 .ct-faq a,.ct-faq-intro a{color:#843A45}
-.ct-faq-fin{background:transparent;border:3px solid #A8B2A1;border-radius:30px;padding:16px 20px;margin-top:40px;margin-bottom:64px;max-width:820px;color:#382A25}
+.ct-faq-fin{background:transparent;border:3px solid #A8B2A1;border-radius:30px;padding:16px 20px;margin-top:40px;max-width:820px;color:#382A25}
+/* Même espace avant le pied de page que sur les pages avec titre (Astra : 60 px sur ordinateur) */
+@media (min-width:922px){.ast-plain-container.ast-no-sidebar #primary:has(.ct-faq-fin){margin-bottom:60px}}
 .ct-faq-fin p{margin-bottom:12px}
 .ct-faq-fin .wp-block-buttons{margin-top:4px}
 .ct-faq-fin .wp-block-button .wp-block-button__link{border:3px solid #A8B2A1!important;border-radius:30px;color:#382A25!important;background:transparent!important;padding:10px 32px;font-weight:600}
