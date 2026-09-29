@@ -80,8 +80,8 @@ add_action('wp_head', function () {
 .ct-real .ct-agence{font-size:14px;font-style:italic;opacity:.85}
 .ct-real .ct-galerie{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
 .ct-real .ct-galerie figure{margin:0!important}
-.ct-real .ct-galerie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block}
-.ct-real .ct-galerie figcaption{margin:8px 0 0;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#843A45;text-align:left}
+.ct-real .ct-galerie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:24px;display:block}
+.ct-real .ct-galerie figcaption{margin:10px 0 0;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#843A45;text-align:center}
 .ct-real + .ct-faq-fin{margin-top:48px}
 .ct-compare{margin:26px 0 8px;outline:none}
 .ct-compare-tete{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
@@ -93,9 +93,10 @@ add_action('wp_head', function () {
 .ct-compare-cols{display:grid;gap:14px}
 .ct-cols-3 .ct-compare-cols{grid-template-columns:repeat(3,1fr)}
 .ct-cols-2 .ct-compare-cols{grid-template-columns:repeat(2,1fr)}
-.ct-col-titre{margin:0 0 6px!important;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#843A45;text-align:left!important}
-.ct-slides{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden}
-.ct-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .35s;cursor:zoom-in}
+.ct-col-titre{margin:0 0 10px!important;font-size:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#843A45;text-align:center!important}
+.ct-slides{position:relative;aspect-ratio:4/3;background:#fff}
+/* L'image garde son format et ses propres coins arrondis, centrée dans le cadre */
+.ct-slide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:auto!important;height:auto!important;max-width:100%;max-height:100%;border-radius:24px;opacity:0;transition:opacity .35s;cursor:zoom-in}
 .ct-slide.actif{opacity:1;z-index:1}
 .ct-legende{display:none}
 .ct-points{display:flex;justify-content:center;gap:8px;margin-top:12px}
