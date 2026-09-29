@@ -83,6 +83,27 @@ add_action('wp_head', function () {
 .ct-real .ct-galerie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block}
 .ct-real .ct-galerie figcaption{margin:8px 0 0;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#843A45;text-align:left}
 .ct-real + .ct-faq-fin{margin-top:48px}
+.ct-compare{margin:26px 0 8px;outline:none}
+.ct-compare-tete{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.ct-compare-tete h3{font-family:'Montserrat',sans-serif;font-weight:600;font-size:18px;color:#382A25;margin:0}
+.ct-compare-nav{display:flex;align-items:center;gap:10px}
+.ct-compare-nav button{cursor:pointer;width:40px;height:40px;border:2px solid #A8B2A1;border-radius:50%;background:#fff;color:#382A25;font-size:24px;line-height:1;padding:0}
+.ct-compare-nav button:hover,.ct-compare-nav button:focus-visible{background:#A8B2A1;outline:none}
+.ct-compteur{font-size:14px;font-weight:600;min-width:44px;text-align:center}
+.ct-compare-cols{display:grid;gap:14px}
+.ct-cols-3 .ct-compare-cols{grid-template-columns:repeat(3,1fr)}
+.ct-cols-2 .ct-compare-cols{grid-template-columns:repeat(2,1fr)}
+.ct-col-titre{margin:0 0 6px!important;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#843A45;text-align:left!important}
+.ct-slides{position:relative;aspect-ratio:4/3;background:#F4F1EE;border-radius:16px;overflow:hidden}
+.ct-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .35s;cursor:zoom-in}
+.ct-slide.actif{opacity:1;z-index:1}
+.ct-legende{margin:10px 0 4px!important;font-size:14px;font-style:italic;text-align:center!important}
+.ct-points{display:flex;justify-content:center;gap:8px}
+.ct-points span{width:10px;height:10px;border-radius:50%;background:#E7E1DC;cursor:pointer}
+.ct-points span.actif{background:#A8B2A1}
+.ct-zoom{position:fixed;inset:0;z-index:100000;background:rgba(56,42,37,.9);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.ct-zoom img{max-width:100%;max-height:100%;border-radius:12px}
+@media (max-width:781px){.ct-cols-3 .ct-compare-cols,.ct-cols-2 .ct-compare-cols{grid-template-columns:1fr;gap:10px}.ct-compare-tete{flex-wrap:wrap}}
 @media (max-width:781px){.ct-real h1{font-size:24px}.ct-real .ct-galerie{grid-template-columns:repeat(2,1fr);gap:10px}.ct-real .ct-projet h2{font-size:21px}}
 /* Toutes les pages : texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone.
    Exclus : textes centrés/alignés, textes des encadrés à icône (Kadence), formulaires, accroches. */
@@ -93,6 +114,47 @@ body.page .entry-content .wpcf7 p{text-align:left!important;-webkit-hyphens:manu
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}
 </style>
+    <?php
+}, 100);
+
+// Comparateurs Avant / 3D / Réalisé : toutes les colonnes défilent ensemble
+add_action('wp_footer', function () {
+    if (is_admin()) { return; }
+    ?>
+<script>
+(function(){
+  document.querySelectorAll('.ct-compare').forEach(function(box){
+    var cols = box.querySelectorAll('.ct-slides');
+    var n = cols[0] ? cols[0].children.length : 0, i = 0;
+    var compteur = box.querySelector('.ct-compteur'), legende = box.querySelector('.ct-legende');
+    var points = box.querySelectorAll('.ct-points span');
+    function aller(k){
+      i = (k + n) % n;
+      cols.forEach(function(c){ Array.prototype.forEach.call(c.children, function(img, j){ img.classList.toggle('actif', j === i); }); });
+      points.forEach(function(p, j){ p.classList.toggle('actif', j === i); });
+      if (compteur) compteur.textContent = (i + 1) + ' / ' + n;
+      if (legende && points[i]) legende.textContent = points[i].getAttribute('data-legende');
+    }
+    box.querySelector('.ct-prec').addEventListener('click', function(){ aller(i - 1); });
+    box.querySelector('.ct-suiv').addEventListener('click', function(){ aller(i + 1); });
+    points.forEach(function(p, j){ p.addEventListener('click', function(){ aller(j); }); });
+    box.addEventListener('keydown', function(e){ if (e.key === 'ArrowLeft') aller(i - 1); if (e.key === 'ArrowRight') aller(i + 1); });
+    var x0 = null;
+    box.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, {passive:true});
+    box.addEventListener('touchend', function(e){ if (x0 === null) return; var d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) aller(d < 0 ? i + 1 : i - 1); x0 = null; });
+    box.querySelectorAll('.ct-slide').forEach(function(img){
+      img.addEventListener('click', function(){
+        var z = document.createElement('div'); z.className = 'ct-zoom';
+        var big = document.createElement('img'); big.src = img.currentSrc || img.src; big.alt = img.alt;
+        z.appendChild(big); z.addEventListener('click', function(){ z.remove(); });
+        document.addEventListener('keydown', function esc(e){ if (e.key === 'Escape') { z.remove(); document.removeEventListener('keydown', esc); } });
+        document.body.appendChild(z);
+      });
+    });
+    aller(0);
+  });
+})();
+</script>
     <?php
 }, 100);
 

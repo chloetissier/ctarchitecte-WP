@@ -2,10 +2,22 @@
 $agence = "Projet conçu et suivi par Chloé Tissier, au sein de l'agence Cadea."
 $projets = @(
   @{ cat='pro'; titre='Golf du Gouverneur'; meta='Accueil, restaurant et salles de séminaire · Conception et suivi de travaux'; agence=$true
-     texte=@("Rénovation de trois espaces d'un complexe golfique : l'accueil et sa boutique, le restaurant et les salles de séminaire.", "L'enjeu : moderniser l'image du lieu et fluidifier l'accueil de la clientèle, tout en conservant le caractère du bâtiment et ses grandes arches.")
-     img=@(@('golf-accueil-avant.jpg','Avant','Accueil du Golf du Gouverneur avant rénovation'), @('golf-accueil-3d.jpg','Visuel 3D','Visuel 3D du nouvel accueil du Golf du Gouverneur'), @('golf-accueil-apres.jpg','Réalisé','Nouvel accueil du Golf du Gouverneur après travaux'),
-           @('golf-seminaire-avant.jpg','Avant','Espace séminaire avant rénovation'), @('golf-seminaire-3d.jpg','Visuel 3D','Visuel 3D du hall des salles de séminaire'), @('golf-seminaire-apres.jpg','Réalisé','Hall des salles de séminaire après travaux, îlot central vert'),
-           @('golf-seminaire-apres-2.jpg','Réalisé','Coin café sur mesure de l{apos}espace séminaire'), @('golf-restaurant-apres.jpg','Réalisé','Salon du restaurant avec banquette jaune et fauteuils verts'), @('golf-restaurant-apres-2.jpg','Réalisé','Claustra bois séparant les espaces du restaurant')) }
+     texte=@("Rénovation de trois espaces d'un complexe golfique : l'accueil, les coins VIP du restaurant ainsi que l'espace lounge, et les salles de séminaire avec leur hall.", "L'enjeu : moderniser l'image du lieu et fluidifier l'accueil de la clientèle, tout en conservant le caractère du bâtiment et ses grandes arches.")
+     # Comparateurs synchronisés : chaque ligne = un point de vue, dans l'ordre des colonnes
+     compare=@(
+       @{ titre='Accueil'; cols=@('Avant','Visuel 3D','Réalisé'); vues=@(
+          @('golf-acc-1-avant.jpg','golf-acc-1-3d.jpg','golf-acc-1-apres.jpg','Accueil vu de face'),
+          @('golf-acc-2-avant.jpg','golf-acc-2-3d.jpg','golf-acc-2-apres.jpg','Accueil côté grandes arches'),
+          @('golf-acc-3-avant.jpg','golf-acc-3-3d.jpg','golf-acc-3-apres.jpg','Accueil vers l{apos}escalier')) }
+       @{ titre='Hall et salles de séminaire'; cols=@('Avant','Visuel 3D','Réalisé'); vues=@(
+          @('golf-sem-1-avant.jpg','golf-sem-1-3d.jpg','golf-sem-1-apres.jpg','Hall face aux salles'),
+          @('golf-sem-2-avant.jpg','golf-sem-2-3d.jpg','golf-sem-2-apres.jpg','Hall et îlot central'),
+          @('golf-sem-3-avant.jpg','golf-sem-3-3d.jpg','golf-sem-3-apres.jpg','Salle de séminaire')) }
+       @{ titre='Lounge et coins VIP du restaurant'; cols=@('Avant','Réalisé'); vues=@(
+          @('golf-res-1-avant.jpg','golf-res-1-apres.jpg','Espace lounge'),
+          @('golf-res-2-avant.jpg','golf-res-2-apres.jpg','Coin VIP'),
+          @('golf-res-3-avant.jpg','golf-res-3-apres.jpg','Claustra bois')) }
+     ) }
   @{ cat='pro'; titre='Vinci Facilities'; meta='Bureaux dans un bâtiment neuf à ossature bois · Conception et suivi de travaux'; agence=$true
      texte=@("Aménagement intérieur de plusieurs plateaux de bureaux : open spaces, salles de réunion, espaces de convivialité et « rue intérieure » reliant les services.", "Claustras végétaux, sols en damier et mobilier coloré structurent les grands volumes et créent des espaces de travail chaleureux.")
      img=@(@('vinci-avant.jpg','Avant','Plateau de bureaux Vinci Facilities pendant la construction'), @('vinci-avant-2.jpg','Avant','Structure bois du bâtiment avant aménagement'), @('vinci-3d.jpg','Visuel 3D','Visuel 3D de la rue intérieure'),
@@ -58,6 +70,28 @@ foreach ($p in $projets) {
   [void]$h.AppendLine("<!-- wp:paragraph {`"className`":`"ct-projet-meta`"} -->`n<p class=`"ct-projet-meta`"><span class=`"ct-badge`">$etiq</span> $(E $p.meta)</p>`n<!-- /wp:paragraph -->")
   foreach ($t in $p.texte) { [void]$h.AppendLine("<!-- wp:paragraph -->`n<p>$(E $t)</p>`n<!-- /wp:paragraph -->") }
   if ($p.agence) { [void]$h.AppendLine("<!-- wp:paragraph {`"className`":`"ct-agence`"} -->`n<p class=`"ct-agence`">$(E $agence)</p>`n<!-- /wp:paragraph -->") }
+  if ($p.compare) {
+    foreach ($c in $p.compare) {
+      $nc = $c.cols.Count
+      $html = "<div class=`"ct-compare ct-cols-$nc`" tabindex=`"0`" aria-roledescription=`"comparateur`">`n"
+      $html += "<div class=`"ct-compare-tete`"><h3>$(E $c.titre)</h3><div class=`"ct-compare-nav`"><button type=`"button`" class=`"ct-prec`" aria-label=`"Vue précédente`">&#8249;</button><span class=`"ct-compteur`">1 / $($c.vues.Count)</span><button type=`"button`" class=`"ct-suiv`" aria-label=`"Vue suivante`">&#8250;</button></div></div>`n"
+      $html += "<div class=`"ct-compare-cols`">`n"
+      for ($k = 0; $k -lt $nc; $k++) {
+        $html += "<div class=`"ct-col`"><p class=`"ct-col-titre`">$(E $c.cols[$k])</p><div class=`"ct-slides`">"
+        for ($v = 0; $v -lt $c.vues.Count; $v++) {
+          $vue = $c.vues[$v]; $alt = E ("$($vue[$nc]) – $($c.cols[$k])")
+          $act = if ($v -eq 0) { ' actif' } else { '' }
+          $html += "<img class=`"ct-slide$act`" src=`"{{img:$($vue[$k])|$alt}}`" alt=`"$alt`" loading=`"lazy`">"
+        }
+        $html += "</div></div>`n"
+      }
+      $html += "</div>`n<p class=`"ct-legende`">$(E $c.vues[0][$nc])</p>`n"
+      $html += "<div class=`"ct-points`">" + (($c.vues | ForEach-Object { "<span data-legende=`"$(E $_[$nc])`"></span>" }) -join '') + "</div>`n</div>"
+      [void]$h.AppendLine("<!-- wp:html -->`n$html`n<!-- /wp:html -->")
+    }
+    [void]$h.AppendLine("</div>`n<!-- /wp:group -->")
+    continue
+  }
   [void]$h.AppendLine('<!-- wp:group {"className":"ct-galerie","layout":{"type":"default"}} -->' + "`n" + '<div class="wp-block-group ct-galerie">')
   foreach ($i in $p.img) {
     $alt = E $i[2]

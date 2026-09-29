@@ -13,6 +13,7 @@ if ($a === 'lint') {
 }
 
 require __DIR__ . '/wp-load.php';
+kses_remove_filters(); // contenus rédigés par nous : ne pas retirer boutons/attributs des comparateurs
 $src = dirname(__DIR__) . '/legal/';
 
 // Remplace {{img:fichier.jpg|texte alternatif}} par l'image importée dans la médiathèque (importée une seule fois)
