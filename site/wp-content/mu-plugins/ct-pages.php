@@ -25,8 +25,10 @@ add_action('wp_head', function () {
 .ct-faq li::marker{color:#A8B2A1}
 .ct-faq p:last-child{margin-bottom:28px}
 .ct-faq a,.ct-faq-intro a{color:#843A45}
-.ct-faq-fin{background:transparent;border:3px solid #A8B2A1;border-radius:30px;padding:28px 20px;margin-top:40px;max-width:820px;color:#382A25}
-.ct-faq-fin .wp-block-button .wp-block-button__link{border:3px solid #A8B2A1!important;border-radius:30px;color:#382A25!important;background:transparent!important;padding:14px 36px;font-weight:600}
+.ct-faq-fin{background:transparent;border:3px solid #A8B2A1;border-radius:30px;padding:16px 20px;margin-top:40px;margin-bottom:64px;max-width:820px;color:#382A25}
+.ct-faq-fin p{margin-bottom:12px}
+.ct-faq-fin .wp-block-buttons{margin-top:4px}
+.ct-faq-fin .wp-block-button .wp-block-button__link{border:3px solid #A8B2A1!important;border-radius:30px;color:#382A25!important;background:transparent!important;padding:10px 32px;font-weight:600}
 .ct-faq-fin .wp-block-button .wp-block-button__link:hover{background:#A8B2A1!important;color:#382A25!important}
 .ct-apropos{color:#382A25;font-size:16px;line-height:1.7}
 .ct-apropos-haut{gap:56px;margin-bottom:80px!important}
@@ -36,7 +38,7 @@ add_action('wp_head', function () {
 .ct-apropos h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 24px}
 .ct-apropos h2{font-family:'Montserrat',sans-serif;font-weight:600;font-size:22px;color:#843A45;margin:72px 0 18px}
 .ct-apropos-haut h2{margin-top:0}
-.ct-apropos .ct-accroche{font-size:18px;margin:12px 0 36px}
+.ct-apropos .ct-accroche{font-size:16px;margin:12px 0 36px}
 .ct-apropos .ct-accroche strong{font-family:'Benedict',cursive;font-weight:400;font-size:1.45em;line-height:1;color:#382A25}
 .ct-apropos .wp-block-kadence-rowlayout{margin:0 0 24px!important;border-radius:30px;overflow:hidden}
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
