@@ -33,8 +33,9 @@ $before = Test-Site
 if ($before) { throw "Le site était déjà en erreur avant la mise à jour ($before) — rien n'a été modifié." }
 
 # 2. Envoi à côté, puis échange
-& $sftp "option batch continue" "mkdir /home/ctarchq/old-$kind" | Out-Null
-& $sftp "put $work\$Slug $dir/$Slug.new" | Out-Null
+& $sftp "option batch continue" "mkdir /home/ctarchq/old-$kind" "mkdir $dir/$Slug.new" | Out-Null
+# synchronize : reprend un envoi interrompu et supprime les fichiers en trop
+& $sftp "synchronize remote -delete -criteria=size $work\$Slug $dir/$Slug.new" | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "Échec de l'envoi — site inchangé." }
 & $sftp "mv $dir/$Slug $old" "mv $dir/$Slug.new $dir/$Slug" | Out-Null
 
