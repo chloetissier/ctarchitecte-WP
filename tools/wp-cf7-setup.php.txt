@@ -1,0 +1,143 @@
+<?php
+// Script temporaire (supprimé juste après usage) : nouveau formulaire Contact Form 7 avec pièces jointes.
+if (!isset($_GET['k']) || !hash_equals('nlji6wkh8qdpg1rzy540v2cxe97oaumf', $_GET['k'])) { http_response_code(404); exit; }
+header('Content-Type: text/plain; charset=utf-8');
+require __DIR__ . '/wp-load.php';
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
+$a = $_GET['a'] ?? '';
+
+if ($a === 'activate') {
+    echo "upload_max_filesize=" . ini_get('upload_max_filesize') . " post_max_size=" . ini_get('post_max_size') . "\n";
+    $r = activate_plugin('contact-form-7/wp-contact-form-7.php');
+    echo is_wp_error($r) ? 'ERR ' . $r->get_error_message() : "ACTIVATED\n";
+    exit;
+}
+
+if ($a === 'create') {
+    $form_tpl = <<<'TPL'
+<div class="ct-form">
+<p><label>Nom *
+[text* ct-nom autocomplete:name]</label></p>
+
+<p><label>E-mail *
+[email* ct-email autocomplete:email]</label></p>
+
+<p><label>Type de projet : *
+[select* ct-type first_as_label "--- Sélectionner un choix ---" "Rénovation" "Extension" "Construction" "Décoration" "Dossier administratif" "Autre"]</label></p>
+
+<p><label>Décrivez votre projet : *
+[textarea* ct-projet]</label></p>
+
+<div class="ct-fichiers">
+<span class="ct-titre">Photos, plans ou documents (facultatif)</span>
+<p class="ct-aide">Jusqu'à 3 fichiers de 8 Mo maximum chacun : photos (JPG, PNG, HEIC), PDF, Word ou plans (DWG).</p>
+[file ct-fichier-1 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+[file ct-fichier-2 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+[file ct-fichier-3 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+</div>
+
+<p class="ct-rgpd">Vos informations sont utilisées uniquement pour répondre à votre demande. <a href="/politique-de-confidentialite/">En savoir plus</a></p>
+
+[turnstile]
+
+<p>[submit "Envoyer"]</p>
+</div>
+TPL;
+
+    $body = "Nouvelle demande de contact depuis le site ctarchitectedinterieur.fr\n\n"
+          . "Nom : [ct-nom]\nE-mail : [ct-email]\nType de projet : [ct-type]\n\n"
+          . "Projet :\n[ct-projet]\n\n"
+          . "Pièces jointes : voir fichiers joints à cet e-mail (le cas échéant).\n";
+
+    $messages = [
+        'mail_sent_ok'             => "Merci de m'avoir contactée ! Je reviendrai vers vous rapidement afin d'échanger sur votre projet.",
+        'mail_sent_ng'             => "Une erreur est survenue lors de l'envoi. Merci de réessayer ou d'écrire directement à contact@ctarchitectedinterieur.fr.",
+        'validation_error'         => "Un ou plusieurs champs contiennent une erreur. Merci de vérifier et de réessayer.",
+        'spam'                     => "La vérification anti-robot a échoué. Merci de réessayer.",
+        'accept_terms'             => "Merci d'accepter les conditions avant d'envoyer votre message.",
+        'invalid_required'         => "Ce champ est obligatoire.",
+        'invalid_too_long'         => "Ce texte est trop long.",
+        'invalid_too_short'        => "Ce texte est trop court.",
+        'upload_failed'            => "Le fichier n'a pas pu être envoyé. Merci de réessayer.",
+        'upload_file_type_invalid' => "Ce type de fichier n'est pas accepté (photos, PDF, Word ou DWG uniquement).",
+        'upload_file_too_large'    => "Ce fichier dépasse 8 Mo. Merci d'en envoyer une version plus légère.",
+        'upload_failed_php_error'  => "Le fichier n'a pas pu être envoyé. Merci de réessayer.",
+        'invalid_email'            => "Merci de saisir une adresse e-mail valide.",
+        'invalid_tel'              => "Merci de saisir un numéro de téléphone valide.",
+    ];
+
+    $existing = get_page_by_path('ct-formulaire-contact', OBJECT, 'wpcf7_contact_form');
+    $cf = $existing ? wpcf7_contact_form($existing->ID) : WPCF7_ContactForm::get_template();
+    $cf->set_title('Formulaire de contact CT');
+    $cf->set_properties([
+        'form'     => $form_tpl,
+        'mail'     => [
+            'active'             => true,
+            'subject'            => 'Nouvelle demande de contact – [ct-nom]',
+            'sender'             => "CT Architecte d'intérieur <contact@ctarchitectedinterieur.fr>",
+            'recipient'          => 'contact@ctarchitectedinterieur.fr',
+            'body'               => $body,
+            'additional_headers' => 'Reply-To: [ct-nom] <[ct-email]>',
+            'attachments'        => "[ct-fichier-1]\n[ct-fichier-2]\n[ct-fichier-3]",
+            'use_html'           => false,
+            'exclude_blank'      => false,
+        ],
+        'mail_2'   => ['active' => false],
+        'messages' => $messages,
+        'additional_settings' => '',
+    ]);
+    $id = $cf->save();
+    wp_update_post(['ID' => $id, 'post_name' => 'ct-formulaire-contact']);
+    echo "FORM id=$id\n";
+
+    // Page de test cachée (hors menu, masquée à Google)
+    $slug = 'test-formulaire-contact';
+    $page = get_page_by_path($slug);
+    $content = '<!-- wp:shortcode -->[contact-form-7 id="' . $id . '" title="Formulaire de contact CT"]<!-- /wp:shortcode -->';
+    $pdata = ['post_title' => 'Test – nouveau formulaire de contact', 'post_name' => $slug, 'post_content' => $content,
+              'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'closed'];
+    if ($page) { $pdata['ID'] = $page->ID; }
+    $pid = $page ? wp_update_post($pdata) : wp_insert_post($pdata);
+    update_post_meta($pid, '_yoast_wpseo_meta-robots-noindex', '1');
+    wp_update_post(['ID' => $pid]);
+    do_action('litespeed_purge_all');
+    echo "PAGE id=$pid " . get_permalink($pid) . "\n";
+    exit;
+}
+
+if ($a === 'diag') {
+    $err = [];
+    add_action('wp_mail_failed', function ($e) use (&$err) { $err[] = $e->get_error_message(); });
+    $att = WP_CONTENT_DIR . '/uploads/2026/09/ct-favicon-512-150x150.png';
+    add_action('phpmailer_init', function ($m) {
+        $m->SMTPDebug = 2;
+        $m->Debugoutput = function ($str) {
+            if (preg_match('/^SERVER -> CLIENT: [45]\d\d|^CLIENT -> SERVER: (MAIL|RCPT|DATA)|^SERVER -> CLIENT: 25\d|^SERVER -> CLIENT: 354/', $str)) { echo '   ' . trim($str) . "\n"; }
+        };
+    }, 999);
+    $t = $_GET['t'] ?? '';
+    $cf7h = ["From: CT Architecte d'intérieur <contact@ctarchitectedinterieur.fr>", 'Reply-To: TEST Claude <contact@ctarchitectedinterieur.fr>'];
+    $tests = $t === 'pj' ? ['piecejointe' => [[], [$att]]]
+           : ($t === 'cf7' ? ['comme-cf7' => [$cf7h, [$att]]]
+           : ($t === 'entetes' ? ['entetes-seuls' => [$cf7h, []]]
+           : ['simple' => [[], []]]));
+    foreach ($tests as $name => [$h, $files]) {
+        $err = [];
+        $ok = wp_mail('contact@ctarchitectedinterieur.fr', "Diagnostic formulaire ($name)", "Test technique, à supprimer.", $h, $files);
+        echo "$name: " . ($ok ? 'OK' : 'ECHEC ' . implode(' | ', $err)) . "\n";
+    }
+    $cf = wpcf7_contact_form(205);
+    echo "mail cf7: " . json_encode($cf->prop('mail'), JSON_UNESCAPED_UNICODE) . "\n";
+    exit;
+}
+
+if ($a === 'turnstile') {
+    $raw = @file_get_contents(dirname(__DIR__) . '/turnstile.txt');
+    preg_match('/Site key[^:]*:\s*(\S+)/i', (string) $raw, $m1);
+    preg_match('/Secret key[^:]*:\s*(\S+)/i', (string) $raw, $m2);
+    if (empty($m1[1]) || empty($m2[1])) { exit("ERR cles"); }
+    WPCF7::update_option('turnstile', [$m1[1] => $m2[1]]);
+    do_action('litespeed_purge_all');
+    echo "TURNSTILE OK\n";
+    exit;
+}
