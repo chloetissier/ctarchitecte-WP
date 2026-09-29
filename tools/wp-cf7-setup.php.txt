@@ -2,6 +2,12 @@
 // Script temporaire (supprimé juste après usage) : nouveau formulaire Contact Form 7 avec pièces jointes.
 if (!isset($_GET['k']) || !hash_equals('nlji6wkh8qdpg1rzy540v2cxe97oaumf', $_GET['k'])) { http_response_code(404); exit; }
 header('Content-Type: text/plain; charset=utf-8');
+if (($_GET['a'] ?? '') === 'lint') {
+    $f = dirname(__DIR__) . '/' . basename($_GET['f'] ?? '');
+    try { token_get_all(file_get_contents($f), TOKEN_PARSE); echo "SYNTAX OK " . basename($f) . "\n"; }
+    catch (ParseError $e) { echo "SYNTAX ERROR line " . $e->getLine() . ": " . $e->getMessage() . "\n"; }
+    exit;
+}
 require __DIR__ . '/wp-load.php';
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 $a = $_GET['a'] ?? '';
@@ -30,10 +36,14 @@ if ($a === 'create') {
 
 <div class="ct-fichiers">
 <span class="ct-titre">Photos, plans ou documents (facultatif)</span>
-<p class="ct-aide">Jusqu'à 3 fichiers de 8 Mo maximum chacun : photos (JPG, PNG, HEIC), PDF, Word ou plans (DWG).</p>
+<p class="ct-aide">Jusqu'à 6 fichiers (8 Mo maximum par fichier, 20 Mo au total) : photos (JPG, PNG, HEIC), PDF, Word ou plans (DWG). Un nouveau champ apparaît à chaque fichier ajouté.</p>
 [file ct-fichier-1 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
 [file ct-fichier-2 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
 [file ct-fichier-3 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+[file ct-fichier-4 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+[file ct-fichier-5 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+[file ct-fichier-6 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
+<p class="ct-total" aria-live="polite"></p>
 </div>
 
 <p class="ct-rgpd">Vos informations sont utilisées uniquement pour répondre à votre demande. <a href="/politique-de-confidentialite/">En savoir plus</a></p>
@@ -78,7 +88,7 @@ TPL;
             'recipient'          => 'contact@ctarchitectedinterieur.fr',
             'body'               => $body,
             'additional_headers' => 'Reply-To: [ct-nom] <[ct-email]>',
-            'attachments'        => "[ct-fichier-1]\n[ct-fichier-2]\n[ct-fichier-3]",
+            'attachments'        => "[ct-fichier-1]\n[ct-fichier-2]\n[ct-fichier-3]\n[ct-fichier-4]\n[ct-fichier-5]\n[ct-fichier-6]",
             'use_html'           => false,
             'exclude_blank'      => false,
         ],

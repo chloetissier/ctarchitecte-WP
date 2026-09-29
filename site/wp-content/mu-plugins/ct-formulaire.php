@@ -33,6 +33,60 @@ add_action('wp_head', function () {
 .wpcf7 form .wpcf7-response-output{border-radius:12px;padding:12px 16px;font-family:'Montserrat',sans-serif;color:#382A25;margin:16px 0 0}
 .wpcf7 form.sent .wpcf7-response-output{border-color:#A8B2A1;background:#f3f5f2}
 .wpcf7 form.invalid .wpcf7-response-output,.wpcf7 form.failed .wpcf7-response-output,.wpcf7 form.spam .wpcf7-response-output{border-color:#843A45}
+.ct-form .ct-fichiers .wpcf7-form-control-wrap{margin-top:8px}
+.ct-form .ct-fichiers .ct-cache{display:none}
+.ct-form .ct-total{font-size:13px;margin:10px 0 0}
+.ct-form .ct-total.ct-trop{color:#843A45;font-weight:600}
 </style>
     <?php
 }, 100);
+
+// Champs fichiers affichés un par un + total affiché (limite 20 Mo)
+add_action('wp_footer', function () {
+    if (is_admin() || !function_exists('wpcf7_contact_form')) { return; }
+    ?>
+<script>
+(function(){
+  var MAX = 20 * 1024 * 1024;
+  function init(box){
+    var wraps = box.querySelectorAll('.wpcf7-form-control-wrap[data-name^="ct-fichier-"]');
+    var out = box.querySelector('.ct-total');
+    function maj(){
+      var total = 0, dernier = 0;
+      wraps.forEach(function(w, i){
+        var inp = w.querySelector('input[type=file]');
+        if (inp && inp.files && inp.files.length) { total += inp.files[0].size; dernier = i + 1; }
+      });
+      wraps.forEach(function(w, i){ w.classList.toggle('ct-cache', i > dernier); });
+      if (out) {
+        if (!total) { out.textContent = ''; out.classList.remove('ct-trop'); return; }
+        var mo = (total / 1048576).toFixed(1).replace('.', ',');
+        var trop = total > MAX;
+        out.textContent = 'Total : ' + mo + ' Mo sur 20 Mo' + (trop ? ' – trop lourd : retirez un fichier ou envoyez une version plus légère.' : '');
+        out.classList.toggle('ct-trop', trop);
+      }
+    }
+    wraps.forEach(function(w){ var inp = w.querySelector('input[type=file]'); if (inp) inp.addEventListener('change', maj); });
+    document.addEventListener('wpcf7mailsent', function(){ setTimeout(maj, 50); });
+    maj();
+  }
+  document.querySelectorAll('.ct-form .ct-fichiers').forEach(init);
+})();
+</script>
+    <?php
+}, 100);
+
+// Contrôle serveur : 20 Mo maximum pour l'ensemble des pièces jointes
+add_filter('wpcf7_validate', function ($result, $tags) {
+    $total = 0;
+    $premier = null;
+    foreach ($tags as $tag) {
+        if ($tag->basetype !== 'file' || strpos($tag->name, 'ct-fichier-') !== 0) { continue; }
+        $premier = $premier ?: $tag;
+        if (!empty($_FILES[$tag->name]['size'])) { $total += (int) $_FILES[$tag->name]['size']; }
+    }
+    if ($premier && $total > 20 * 1024 * 1024) {
+        $result->invalidate($premier, 'Les fichiers joints dépassent 20 Mo au total. Merci de retirer un fichier ou d\'envoyer des versions plus légères.');
+    }
+    return $result;
+}, 20, 2);
