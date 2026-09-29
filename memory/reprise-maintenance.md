@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T09:33:23.037Z
+  modified: 2026-09-29T09:44:45.406Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -13,6 +13,11 @@ Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
 Fait : WP Mail SMTP (e-mails OK), 8 extensions à jour dont WPForms 2.0.2.1 (formulaire id 75 vérifié sur /contact/), pages légales publiées + liens pied de page, bandeau cookies en ligne (mu-plugin `ct-bandeau-cookies.php`, localStorage, charte), politique de confidentialité corrigée. Anti-spam WPForms déjà actif (antispam_v3 + délai 2 s) ; aucun captcha (captcha-provider vide).
 
 Aussi fait le 2026-09-29 : Astra 4.14.0, PHP 8.3 (copie 8.0 : `audit/.ovhconfig.php80`), ménage (twentytwentythree + fichiers parasites rangés dans `/home/ctarchq/old-themes|old-files`, .tmb 755). SEO de base : blogname « CT Architecte d'intérieur », slogan rempli, titre masqué dans l'en-tête Astra (display-site-title-responsive=false), Yoast company_name, meta descriptions pages 109/190/107.
+
+Fait aussi le 2026-09-29 : notifications formulaire → contact@ (replyto = champ 2 E-mail, sujet « Nouvelle demande de contact – {nom} ») ; thèmes twentytwentythree/twentytwentyfour/ct-architecte-theme SUPPRIMÉS du serveur (copie de ct-architecte-theme dans git `site/`), fichiers parasites supprimés. Reste seul thème de secours : twentytwentyfive.
+
+Plan validé par elle le 2026-09-29, dans l'ordre : (a) captcha Turnstile — elle a créé un compte (via son Google), j'attends site key + secret dans `audit/turnstile.txt` ; (b) Google Search Console ensemble (propriété préfixe d'URL, vérif par fichier HTML que je dépose) + sitemap_index.xml ; (c) optimiser sa fiche Google Business Profile (elle en a une) ; (d) liens depuis Travaux.com/CFAI/LinkedIn — son site reste sa vitrine principale ; (e) elle m'enverra son contenu pour les pages vides ; (f) SEO naturel APRÈS que le site soit fini (concurrent camillethomas.fr apparu après juillet 2025).
+Proposé, pas fait : supprimer l'ancienne sauvegarde ai1wm de mai 2026 (274 Mo, `wp-content/ai1wm-backups/`) — attendre son accord.
 
 Reste :
 1. Supprimer `old-plugins/`, `old-themes/`, `old-files/` hors www vers mi-octobre 2026 si rien n'a cassé.
