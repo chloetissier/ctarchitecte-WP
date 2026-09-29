@@ -60,9 +60,11 @@ add_action('wp_head', function () {
 .ct-presta .ct-bande .wp-block-columns{gap:48px;margin:0}
 .ct-presta .ct-bande h2{font-size:20px}
 .ct-presta .ct-bande ul{margin-bottom:12px}
+.ct-presta .ct-bande .ct-bande-fin{margin:20px 0 0;padding-top:18px;border-top:1px solid rgba(56,42,37,.15);font-weight:600}
 .ct-presta .ct-bande + .ct-rdv{border-top:0;margin-top:40px;padding-top:0}
+.ct-presta .ct-rdv p:last-child{margin-bottom:0}
 .ct-presta a{color:#843A45}
-.ct-presta + .ct-faq-fin{margin-top:40px}
+.ct-presta + .ct-faq-fin{margin-top:32px}
 @media (max-width:781px){.ct-presta h1{font-size:24px}.ct-presta .ct-bande{padding:24px 20px}.ct-presta .ct-bande .wp-block-columns{gap:8px}}
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}
