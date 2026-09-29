@@ -85,7 +85,7 @@ foreach ($p in $projets) {
         }
         $html += "</div></div>`n"
       }
-      $html += "</div>`n<p class=`"ct-legende`">$(E $c.vues[0][$nc])</p>`n"
+      $html += "</div>`n"
       $html += "<div class=`"ct-points`">" + (($c.vues | ForEach-Object { "<span data-legende=`"$(E $_[$nc])`"></span>" }) -join '') + "</div>`n</div>"
       [void]$h.AppendLine("<!-- wp:html -->`n$html`n<!-- /wp:html -->")
     }
