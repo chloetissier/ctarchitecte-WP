@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T12:38:03.202Z
+  modified: 2026-09-29T12:44:46.654Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -27,7 +27,7 @@ Fiche Google Business (2026-09-29) : description réécrite collée, catégorie 
 
 E-mails : réception CONFIRMÉE par elle le 2026-09-29 (test + vrai envoi formulaire, instantané). Favicon installé (site_icon=203, symbole du logo recadré, source `docs/images/ct-favicon-512.png`).
 Pièces jointes : elle a choisi l'option B (Contact Form 7) le 2026-09-29. Préparé EN LOCAL, rien déployé : CF7 6.1.7 + pack fr_FR (scratchpad), style `site/wp-content/mu-plugins/ct-formulaire.php`, script de config `audit/cf7-…php` (actions activate / create → form + page test cachée `test-formulaire-contact` noindex / turnstile). Envoi d'abord refusé par le classifieur, puis elle est passée en mode « Ask before edits » et a validé → DÉPLOYÉ le 2026-09-29 : CF7 6.1.7 actif (+ fr_FR), formulaire id 205, page de test cachée id 206 `/test-formulaire-contact/` (noindex), Turnstile configuré dans CF7, test avec pièce jointe reçu OK. Script de config archivé : `tools/wp-cf7-setup.php.txt`.
-À FAIRE après sa validation : remplacer le bloc WPForms de la page Contact (107) par `[contact-form-7 id="205"]`, supprimer la page 206, puis désactiver/supprimer WPForms Lite ; mettre à jour la politique de confidentialité (pièces jointes transmises par e-mail, non conservées sur le serveur).
+VALIDÉ par elle et MIS EN LIGNE le 2026-09-29 : page Contact (107) = CF7 id 205 (ancien contenu sauvegardé dans `/home/ctarchq/contact-page-avant.txt`), page test 206 à la corbeille, politique de confidentialité mentionne les pièces jointes, WPForms Lite désactivé et déplacé dans `/home/ctarchq/old-plugins/wpforms-lite-desinstalle-20260929` (à supprimer mi-octobre avec le reste). Turnstile en mode « Managed » : elle peut passer en « Non-interactive » dans Cloudflare si le clic gêne.
 Leçon : OVH bride l'envoi SMTP après plusieurs e-mails rapprochés (« data not accepted » / « MAIL FROM failed ») → espacer les tests, un seul envoi à la fois.
 2026-09-29 après-midi : formulaire test = zone glisser-déposer multi-fichiers (JS dans mu-plugin ct-formulaire.php, répartit jusqu'à 6 fichiers dans les champs CF7 ct-fichier-1..6 via DataTransfer ; repli un-par-un pour vieux navigateurs), 8 Mo/fichier, 20 Mo total (contrôle serveur wpcf7_validate). Elle a changé le mot de passe de contact@ le 2026-09-29 → mis à jour dans wp-config (WPMS_SMTP_PASS) et `audit/mdp-contact.txt` ; ancienne config dans `/home/ctarchq/wp-config.backup-20260928.php`.
 (Ancienne note) Sécurité : le mot de passe de la boîte contact@ est faible (proche du nom de domaine) → lui recommander de le changer (espace client OVH, E-mails) puis mettre à jour `audit/mdp-contact.txt` ET la constante WPMS_SMTP_PASS de wp-config.php.

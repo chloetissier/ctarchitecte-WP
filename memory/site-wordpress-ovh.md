@@ -5,12 +5,13 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-28T14:06:29.351Z
+  modified: 2026-09-29T12:46:04.473Z
 ---
 
 La personne maintient le site WordPress ctarchitectedinterieur.fr (architecte d'intérieur), hébergé OVH mutualisé cluster100, login `ctarchq`, racine `/home/ctarchq/www`.
 
 - Mises à jour d'extensions : `tools/update-plugin.ps1 <slug>` (échange de dossier + retour arrière auto ; anciennes versions dans `/home/ctarchq/old-plugins/`). Modifs en base : script PHP temporaire à nom aléatoire dans www, lancé par curl, supprimé aussitôt.
+- Clé des scripts PHP temporaires : dans `audit/cle-scripts-temporaires.txt` (gitignoré, changée le 2026-09-29 après qu'une ancienne clé a été poussée par erreur dans `tools/wp-cf7-setup.php.txt` ; l'ancienne ne protège plus aucun script). RÈGLE : ne JAMAIS committer de clé, mot de passe ou clé Turnstile — les copies archivées dans `tools/` utilisent le texte `CLE_A_GENERER`. Vérifier avec Grep avant chaque commit.
 - Accès : SFTP seulement (pas de SSH sur l'offre, FTP sans TLS → ne pas utiliser). Script `C:\Users\Chloé\ovh-site\tools\sftp.ps1` (WinSCP, mot de passe lu dans `~/.ovh_netrc`, jamais l'afficher).
 - Copie locale de travail : `C:\Users\Chloé\ovh-site\site\`. **Thème actif = Astra** (constaté en base le 2026-09-28) ; `ct-architecte-theme` (enfant de twentytwentyfour) est installé mais inactif.
 - Base : `ctarchq652` sur `ctarchq652.mysql.db`, préfixe `mod768_`, joignable seulement depuis OVH → export via script PHP temporaire à nom/clé aléatoires, supprimé après usage.

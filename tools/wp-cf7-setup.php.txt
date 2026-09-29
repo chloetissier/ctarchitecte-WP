@@ -1,6 +1,6 @@
 <?php
 // Script temporaire (supprimé juste après usage) : nouveau formulaire Contact Form 7 avec pièces jointes.
-if (!isset($_GET['k']) || !hash_equals('nlji6wkh8qdpg1rzy540v2cxe97oaumf', $_GET['k'])) { http_response_code(404); exit; }
+if (!isset($_GET['k']) || !hash_equals('CLE_A_GENERER', $_GET['k'])) { http_response_code(404); exit; }
 header('Content-Type: text/plain; charset=utf-8');
 if (($_GET['a'] ?? '') === 'lint') {
     $f = dirname(__DIR__) . '/' . basename($_GET['f'] ?? '');
