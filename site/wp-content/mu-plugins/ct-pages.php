@@ -65,6 +65,25 @@ add_action('wp_head', function () {
 .ct-presta .ct-rdv p:last-child{margin-bottom:0}
 .ct-presta a{color:#843A45}
 .ct-presta + .ct-faq-fin{margin-top:32px}
+.ct-real{color:#382A25;font-size:16px;line-height:1.7}
+.ct-real h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 16px}
+.ct-real .ct-real-intro{font-size:17px;margin-bottom:24px}
+.ct-filtres{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px}
+.ct-filtre{cursor:pointer;border:2px solid #A8B2A1;border-radius:30px;background:#fff;color:#382A25;padding:8px 20px;font:600 14px 'Montserrat',sans-serif}
+.ct-filtre:hover,.ct-filtre:focus-visible{border-color:#843A45;outline:none}
+.ct-filtre.actif{background:#A8B2A1;color:#382A25}
+.ct-real .ct-projet{border-top:3px solid #A8B2A1;padding-top:36px;margin-top:44px}
+.ct-real .ct-projet.ct-masque{display:none}
+.ct-real .ct-projet h2{font-family:'Montserrat',sans-serif;font-weight:600;font-size:24px;color:#843A45;margin:0 0 6px}
+.ct-real .ct-projet-meta{font-size:14px;font-weight:600;margin-bottom:14px}
+.ct-real .ct-badge{display:inline-block;margin-right:8px;padding:2px 12px;border-radius:30px;background:#E7E1DC;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.ct-real .ct-agence{font-size:14px;font-style:italic;opacity:.85}
+.ct-real .ct-galerie{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+.ct-real .ct-galerie figure{margin:0!important}
+.ct-real .ct-galerie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block}
+.ct-real .ct-galerie figcaption{margin:8px 0 0;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#843A45;text-align:left}
+.ct-real + .ct-faq-fin{margin-top:48px}
+@media (max-width:781px){.ct-real h1{font-size:24px}.ct-real .ct-galerie{grid-template-columns:repeat(2,1fr);gap:10px}.ct-real .ct-projet h2{font-size:21px}}
 /* Toutes les pages : texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone.
    Exclus : textes centrés/alignés, textes des encadrés à icône (Kadence), formulaires, accroches. */
 @media (min-width:768px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text):not(.ct-presta-intro):not(.ct-accroche):not(.ct-rgpd):not(.ct-aide):not(.ct-total){text-align:justify;-webkit-hyphens:auto;hyphens:auto}}
@@ -74,6 +93,28 @@ body.page .entry-content .wpcf7 p{text-align:left!important;-webkit-hyphens:manu
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}
 </style>
+    <?php
+}, 100);
+
+// Filtre Tous / Professionnels / Particuliers de la page Réalisations
+add_action('wp_footer', function () {
+    if (is_admin()) { return; }
+    ?>
+<script>
+(function(){
+  var btns = document.querySelectorAll('.ct-filtre');
+  if (!btns.length) return;
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var f = b.getAttribute('data-filtre');
+      btns.forEach(function(x){ x.classList.toggle('actif', x === b); x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      document.querySelectorAll('.ct-projet').forEach(function(p){
+        p.classList.toggle('ct-masque', f !== 'tous' && !p.classList.contains('ct-cat-' + f));
+      });
+    });
+  });
+})();
+</script>
     <?php
 }, 100);
 
