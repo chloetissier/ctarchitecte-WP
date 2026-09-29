@@ -15,11 +15,38 @@ if ($a === 'lint') {
 require __DIR__ . '/wp-load.php';
 $src = dirname(__DIR__) . '/legal/';
 
+// Remplace {{img:fichier.jpg|texte alternatif}} par l'image importée dans la médiathèque (importée une seule fois)
+function ct_images($content, $src) {
+    return preg_replace_callback('/\{\{img:([^|}]+)\|([^}]*)\}\}/', function ($m) use ($src) {
+        $file = basename($m[1]);
+        $found = get_posts(['post_type' => 'attachment', 'meta_key' => '_ct_source', 'meta_value' => $file, 'numberposts' => 1, 'fields' => 'ids']);
+        if ($found) { $id = $found[0]; }
+        else {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            $tmp = wp_tempnam($file);
+            copy($src . $file, $tmp);
+            $id = media_handle_sideload(['name' => $file, 'tmp_name' => $tmp], 0, $m[2]);
+            if (is_wp_error($id)) { exit('ERR image ' . $id->get_error_message()); }
+            update_post_meta($id, '_ct_source', $file);
+            update_post_meta($id, '_wp_attachment_image_alt', $m[2]);
+        }
+        return esc_url(wp_get_attachment_image_url($id, 'large'));
+    }, $content);
+}
+
+// Masque le titre automatique d'Astra quand le contenu a déjà son propre H1
+function ct_titre($id, $content) {
+    if (stripos($content, '<h1') !== false) { update_post_meta($id, 'site-post-title', 'disabled'); }
+}
+
 // a=apercu&c=faq&t=Titre : crée/met à jour la page cachée /apercu-<c>/ (noindex) avec contenus/<c>.html
 if ($a === 'apercu') {
     $c = preg_replace('/[^a-z0-9-]/', '', $_GET['c'] ?? '');
     $content = @file_get_contents($src . $c . '.html');
     if (!$content) { exit("ERR contenu $c absent"); }
+    $content = ct_images($content, $src);
     $slug = 'apercu-' . $c;
     $page = get_page_by_path($slug);
     $d = ['post_title' => wp_unslash($_GET['t'] ?? 'Aperçu'), 'post_name' => $slug, 'post_content' => $content,
@@ -27,6 +54,7 @@ if ($a === 'apercu') {
     if ($page) { $d['ID'] = $page->ID; }
     $id = $page ? wp_update_post(wp_slash($d)) : wp_insert_post(wp_slash($d));
     update_post_meta($id, '_yoast_wpseo_meta-robots-noindex', '1');
+    ct_titre($id, $content);
     wp_update_post(['ID' => $id]);
     do_action('litespeed_purge_all');
     echo "APERCU id=$id " . get_permalink($id) . "\n";
@@ -39,6 +67,8 @@ if ($a === 'publier') {
     $id = (int) ($_GET['id'] ?? 0);
     $content = @file_get_contents($src . $c . '.html');
     if (!$content || !$id || get_post_type($id) !== 'page') { exit("ERR parametres"); }
+    $content = ct_images($content, $src);
+    ct_titre($id, $content);
     file_put_contents(dirname(__DIR__) . "/page-$id-avant.txt", get_post_field('post_content', $id));
     $r = wp_update_post(wp_slash(['ID' => $id, 'post_content' => $content]), true);
     if (is_wp_error($r)) { exit('ERR ' . $r->get_error_message()); }

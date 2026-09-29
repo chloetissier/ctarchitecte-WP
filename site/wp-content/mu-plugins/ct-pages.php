@@ -28,6 +28,16 @@ add_action('wp_head', function () {
 .ct-faq-fin{background:#E7E1DC;border-radius:30px;padding:28px 20px;margin-top:40px;max-width:820px;color:#382A25}
 .ct-faq-fin .wp-block-button__link{border:3px solid #382A25;border-radius:30px;color:#382A25;background:transparent;padding:14px 36px;font-weight:600}
 .ct-faq-fin .wp-block-button__link:hover{background:#843A45;border-color:#843A45;color:#fff}
+.ct-apropos{color:#382A25;font-size:16px;line-height:1.7}
+.ct-apropos-haut{gap:48px;margin-bottom:40px}
+.ct-apropos .ct-portrait img{width:100%;height:auto;border-radius:30px;box-shadow:0 10px 30px rgba(56,42,37,.12)}
+.ct-apropos h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 24px}
+.ct-apropos h2{font-family:'Montserrat',sans-serif;font-weight:600;font-size:22px;color:#843A45;margin:36px 0 12px}
+.ct-apropos-haut h2{margin-top:0}
+.ct-apropos .ct-accroche{font-size:18px;margin:8px 0 18px}
+.ct-apropos .ct-accroche strong{display:block;font-family:'Benedict',cursive;font-weight:400;font-size:34px;line-height:1.3;color:#382A25;margin-top:6px}
+.ct-apropos .wp-block-kadence-rowlayout{margin:8px 0 12px;border-radius:30px;overflow:hidden}
+@media (max-width:781px){.ct-apropos-haut{gap:24px}.ct-apropos h1{font-size:24px}.ct-apropos .ct-accroche strong{font-size:28px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}
 </style>
     <?php

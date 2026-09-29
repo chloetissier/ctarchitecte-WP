@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T13:25:14.256Z
+  modified: 2026-09-29T13:45:30.663Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -41,6 +41,7 @@ Reste :
 2. Captcha : proposé Cloudflare Turnstile (gratuit, sans cookie publicitaire) → nécessite qu'elle crée un compte Cloudflare (sa décision). Ne pas utiliser reCAPTCHA (cookies Google → consentement).
 3. Notifications du formulaire envoyées à {admin_email} = chloetissier3@gmail.com (pas contact@) — à lui signaler.
 4a. FAQ (2026-09-29) : 15 questions rédigées avec elle (`contenus/faq.html` ; 1er RDV sur place 90 € déduit si devis signé ; PCMI + DP ; artisans assurés ; 3D en phase APD). Style + JSON-LD FAQPage auto : mu-plugin `ct-pages.php`. Aperçu caché `/apercu-faq/` (id 210, noindex). Outil générique `tools/wp-apercu.php.txt` (a=apercu / a=publier&id=111 → retire noindex + met l'aperçu à la corbeille), clé injectée depuis `audit/`. PUBLIÉE le 2026-09-29 sur /faq/ (id 111, indexable, dans le sitemap, 15 Q en 3 thèmes, JSON-LD FAQPage) ; aperçu 210 à la corbeille ; ancien contenu dans `/home/ctarchq/page-111-avant.txt`. Q7 : RDV découverte 90 € = déplacement + temps, PAS une séance de conseils (elle ne donne aucune idée sans analyse), CR + devis + CGV envoyés ensuite. Style validé : questions « Question N : » bordeaux 20 px, texte 16 px (calé sur l'accueil), séparateurs vert sauge 3 px, bandes de thème beige. Lui rappeler : demander l'indexation de /faq/ dans Search Console.
+4b. À propos (2026-09-29) : texte validé par elle (3 ans en agence spécialisée tertiaire), `contenus/a-propos.html` : photo (docs/images/chloe-tissier-architecte-interieur.jpg, EXIF retiré, source OneDrive Portrait pro/portrait - Copie.jpg) + H1 local + badges Kadence copiés de l'accueil (uniqueID 115_…) + accroche en Benedict + CTA. Titre Astra masqué (meta site-post-title=disabled). Aperçu `/apercu-a-propos/` (id 217). EN ATTENTE de sa validation → publier sur id 115 via a=publier&c=a-propos&id=115.
 4. Pages vides : Prestations (119), A propos (115), Réalisations (113, slug mes-realisations-2), FAQ (111) → lui faire des PROPOSITIONS avant publication (changement visible = son accord).
 
 **Why:** reprendre sans refaire l'état des lieux.
