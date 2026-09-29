@@ -52,6 +52,20 @@ $projets = @(
      img=@(@('entree-3d.jpg','Visuel 3D','Visuel 3D de la salle d{apos}eau'), @('entree-3d-2.jpg','Visuel 3D','Vue axonométrique de la salle d{apos}eau')) }
 )
 
+# Comparateurs des autres projets : images <prefixe>-<n>-<colonne>.jpg préparées dans audit/realisations
+function Comparateur($titre, $prefixe, $colonnes, $noms) {
+  $cles = @{ 'Avant'='avant'; 'Pendant'='pendant'; 'Visuel 3D'='3d'; 'Réalisé'='apres' }
+  $vues = for ($n = 1; $n -le $noms.Count; $n++) { ,(@($colonnes | ForEach-Object { "$prefixe-$n-$($cles[$_]).jpg" }) + $noms[$n - 1]) }
+  @{ titre = $titre; cols = $colonnes; vues = $vues }
+}
+$comparateurs = @{
+  'Vinci Facilities' = @(Comparateur 'Espaces communs et bureaux' 'vin' @('Avant','Visuel 3D','Réalisé') @('Coin détente sous l{apos}escalier','Rue intérieure','Réfectoire','Open space','Salle de réunion'))
+  'RB Système'       = @(Comparateur 'Du visuel 3D à la réalisation' 'rbs' @('Visuel 3D','Réalisé') @('Open space','Bureau de direction','Espace détente','Salle de réunion','Réfectoire','Coin café'))
+  'Jeremias'         = @(Comparateur 'Rez-de-chaussée' 'jer' @('Pendant','Visuel 3D','Réalisé') @('Entrée et accueil','Espace détente','Salle de réunion','Espace repas','Showroom'))
+  'Cofruly'          = @(Comparateur 'Bureaux' 'cof' @('Pendant','Visuel 3D','Réalisé') @('Bureau comptabilité','Bureau de direction','Salle de réunion','Espace commercial'))
+}
+foreach ($p in $projets) { if ($comparateurs.ContainsKey($p.titre)) { $p.compare = $comparateurs[$p.titre]; $p.Remove('img') } }
+
 function E([string]$s) { $s.Replace('&', '&amp;').Replace('<', '&lt;').Replace('>', '&gt;').Replace('"', '&quot;') }
 
 $h = New-Object Text.StringBuilder
