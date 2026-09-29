@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T09:44:45.406Z
+  modified: 2026-09-29T09:58:07.312Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -17,6 +17,9 @@ Aussi fait le 2026-09-29 : Astra 4.14.0, PHP 8.3 (copie 8.0 : `audit/.ovhconfig.
 Fait aussi le 2026-09-29 : notifications formulaire → contact@ (replyto = champ 2 E-mail, sujet « Nouvelle demande de contact – {nom} ») ; thèmes twentytwentythree/twentytwentyfour/ct-architecte-theme SUPPRIMÉS du serveur (copie de ct-architecte-theme dans git `site/`), fichiers parasites supprimés. Reste seul thème de secours : twentytwentyfive.
 
 Plan validé par elle le 2026-09-29, dans l'ordre : (a) captcha Turnstile — elle a créé un compte (via son Google), j'attends site key + secret dans `audit/turnstile.txt` ; (b) Google Search Console ensemble (propriété préfixe d'URL, vérif par fichier HTML que je dépose) + sitemap_index.xml ; (c) optimiser sa fiche Google Business Profile (elle en a une) ; (d) liens depuis Travaux.com/CFAI/LinkedIn — son site reste sa vitrine principale ; (e) elle m'enverra son contenu pour les pages vides ; (f) SEO naturel APRÈS que le site soit fini (concurrent camillethomas.fr apparu après juillet 2025).
+Fait le 2026-09-29 (suite) : Turnstile actif sur formulaire 75 (clés dans `audit/turnstile.txt`, gitignoré ; copie serveur supprimée), politique de confidentialité mise à jour (Turnstile + messagerie Microsoft 365). Fichier de vérification Search Console `googlec01f829dc55a2e2e.html` à la racine www (NE PAS SUPPRIMER). Sa fiche Google Business pointait vers son ancien portfolio PDF → elle a mis le site.
+PROBLÈME E-MAILS : la boîte contact@ est chez Microsoft 365 (MX outlook, SPF `v=spf1 include:spf.protection.outlook.com -all`, DMARC p=quarantine) mais WP Mail SMTP envoie via ssl0.ovh.net → SPF échoue, messages en quarantaine. Correctif demandé à elle dans l'espace client OVH (zone DNS ns10.ovh.net) : SPF → `v=spf1 include:spf.protection.outlook.com include:mx.ovh.com -all`. Vérifier ensuite avec Resolve-DnsName et un envoi test.
+
 Proposé, pas fait : supprimer l'ancienne sauvegarde ai1wm de mai 2026 (274 Mo, `wp-content/ai1wm-backups/`) — attendre son accord.
 
 Reste :
