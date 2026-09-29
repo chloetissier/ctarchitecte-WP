@@ -37,6 +37,18 @@ add_action('wp_head', function () {
 .ct-form .ct-fichiers .ct-cache{display:none}
 .ct-form .ct-total{font-size:13px;margin:10px 0 0}
 .ct-form .ct-total.ct-trop{color:#843A45;font-weight:600}
+.ct-form .ct-drop-actif .wpcf7-form-control-wrap[data-name^="ct-fichier-"]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ct-form .ct-drop{display:block;border:2px dashed #A8B2A1;border-radius:16px;background:#fff;padding:22px 16px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.ct-form .ct-drop:hover,.ct-form .ct-drop:focus-visible,.ct-form .ct-drop.ct-survol{border-color:#843A45;background:#faf8f7;outline:none}
+.ct-form .ct-drop strong{display:block;font-size:15px;color:#382A25}
+.ct-form .ct-drop span{display:block;font-size:13px;margin-top:4px;opacity:.85}
+.ct-form .ct-drop .ct-bouton{display:inline-block;margin-top:12px;border:2px solid #382A25;border-radius:30px;padding:6px 18px;font-weight:600;font-size:13px;opacity:1}
+.ct-form .ct-liste{list-style:none;margin:12px 0 0;padding:0}
+.ct-form .ct-liste li{display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 12px;margin:6px 0;font-size:14px}
+.ct-form .ct-liste .ct-nom{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-form .ct-liste .ct-poids{font-size:12px;opacity:.75;white-space:nowrap}
+.ct-form .ct-liste button{border:0;background:none;color:#843A45;font:600 13px 'Montserrat',sans-serif;cursor:pointer;text-decoration:underline;padding:0}
+.ct-form .ct-alerte{color:#843A45;font-size:13px;font-weight:600;margin:8px 0 0}
 </style>
     <?php
 }, 100);
@@ -47,8 +59,77 @@ add_action('wp_footer', function () {
     ?>
 <script>
 (function(){
-  var MAX = 20 * 1024 * 1024;
+  var MAX = 20 * 1024 * 1024, MAX_FICHIER = 8 * 1024 * 1024;
+  var EXT = /\.(jpe?g|png|heic|heif|webp|pdf|docx?|dwg)$/i;
+  function mo(o){ return (o / 1048576).toFixed(1).replace('.', ',') + ' Mo'; }
+  function peutGlisser(){ try { new DataTransfer(); return true; } catch (e) { return false; } }
+
+  // Zone de dépôt : plusieurs fichiers d'un coup, répartis dans les 6 champs de Contact Form 7
+  function initDrop(box){
+    var inputs = Array.prototype.map.call(box.querySelectorAll('.wpcf7-form-control-wrap[data-name^="ct-fichier-"] input[type=file]'), function(i){ return i; });
+    var out = box.querySelector('.ct-total');
+    var fichiers = [];
+    box.classList.add('ct-drop-actif');
+    var zone = document.createElement('label');
+    zone.className = 'ct-drop'; zone.tabIndex = 0;
+    zone.innerHTML = '<strong>Glissez vos fichiers ici</strong><span>ou</span><span class="ct-bouton">Choisir des fichiers</span>';
+    var choix = document.createElement('input');
+    choix.type = 'file'; choix.multiple = true; choix.hidden = true;
+    choix.accept = '.jpg,.jpeg,.png,.heic,.heif,.webp,.pdf,.doc,.docx,.dwg';
+    zone.appendChild(choix);
+    var liste = document.createElement('ul'); liste.className = 'ct-liste';
+    var alerte = document.createElement('p'); alerte.className = 'ct-alerte'; alerte.setAttribute('aria-live', 'polite');
+    var aide = box.querySelector('.ct-aide');
+    (aide || box.firstChild).insertAdjacentElement('afterend', zone);
+    zone.insertAdjacentElement('afterend', liste);
+    liste.insertAdjacentElement('afterend', alerte);
+
+    function synchro(){
+      inputs.forEach(function(inp, i){
+        var dt = new DataTransfer();
+        if (fichiers[i]) dt.items.add(fichiers[i]);
+        inp.files = dt.files;
+      });
+      liste.innerHTML = '';
+      var total = 0;
+      fichiers.forEach(function(f, i){
+        total += f.size;
+        var li = document.createElement('li');
+        var nom = document.createElement('span'); nom.className = 'ct-nom'; nom.textContent = f.name;
+        var poids = document.createElement('span'); poids.className = 'ct-poids'; poids.textContent = mo(f.size);
+        var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = 'Retirer';
+        btn.addEventListener('click', function(){ fichiers.splice(i, 1); alerte.textContent = ''; synchro(); });
+        li.appendChild(nom); li.appendChild(poids); li.appendChild(btn); liste.appendChild(li);
+      });
+      if (out) {
+        var trop = total > MAX;
+        out.textContent = fichiers.length ? fichiers.length + ' fichier' + (fichiers.length > 1 ? 's' : '') + ' – ' + mo(total) + ' sur 20 Mo' + (trop ? ' – trop lourd : retirez un fichier.' : '') : '';
+        out.classList.toggle('ct-trop', trop);
+      }
+    }
+    function ajouter(liste_){
+      var refus = [];
+      Array.prototype.forEach.call(liste_, function(f){
+        if (!EXT.test(f.name)) { refus.push(f.name + ' (format non accepté)'); return; }
+        if (f.size > MAX_FICHIER) { refus.push(f.name + ' (plus de 8 Mo)'); return; }
+        if (fichiers.length >= inputs.length) { refus.push(f.name + ' (6 fichiers maximum)'); return; }
+        fichiers.push(f);
+      });
+      alerte.textContent = refus.length ? 'Non ajouté : ' + refus.join(', ') + '.' : '';
+      synchro();
+    }
+    choix.addEventListener('change', function(){ ajouter(choix.files); choix.value = ''; });
+    zone.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choix.click(); } });
+    ['dragenter', 'dragover'].forEach(function(ev){ zone.addEventListener(ev, function(e){ e.preventDefault(); zone.classList.add('ct-survol'); }); });
+    ['dragleave', 'drop'].forEach(function(ev){ zone.addEventListener(ev, function(e){ e.preventDefault(); zone.classList.remove('ct-survol'); }); });
+    zone.addEventListener('drop', function(e){ if (e.dataTransfer && e.dataTransfer.files) ajouter(e.dataTransfer.files); });
+    document.addEventListener('wpcf7mailsent', function(){ fichiers = []; alerte.textContent = ''; synchro(); });
+    synchro();
+  }
+
+  // Solution de secours (navigateurs anciens) : un champ apparaît à chaque fichier ajouté
   function init(box){
+    if (peutGlisser()) { initDrop(box); return; }
     var wraps = box.querySelectorAll('.wpcf7-form-control-wrap[data-name^="ct-fichier-"]');
     var out = box.querySelector('.ct-total');
     function maj(){

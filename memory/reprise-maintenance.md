@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T12:25:28.322Z
+  modified: 2026-09-29T12:38:03.202Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -29,7 +29,8 @@ E-mails : réception CONFIRMÉE par elle le 2026-09-29 (test + vrai envoi formul
 Pièces jointes : elle a choisi l'option B (Contact Form 7) le 2026-09-29. Préparé EN LOCAL, rien déployé : CF7 6.1.7 + pack fr_FR (scratchpad), style `site/wp-content/mu-plugins/ct-formulaire.php`, script de config `audit/cf7-…php` (actions activate / create → form + page test cachée `test-formulaire-contact` noindex / turnstile). Envoi d'abord refusé par le classifieur, puis elle est passée en mode « Ask before edits » et a validé → DÉPLOYÉ le 2026-09-29 : CF7 6.1.7 actif (+ fr_FR), formulaire id 205, page de test cachée id 206 `/test-formulaire-contact/` (noindex), Turnstile configuré dans CF7, test avec pièce jointe reçu OK. Script de config archivé : `tools/wp-cf7-setup.php.txt`.
 À FAIRE après sa validation : remplacer le bloc WPForms de la page Contact (107) par `[contact-form-7 id="205"]`, supprimer la page 206, puis désactiver/supprimer WPForms Lite ; mettre à jour la politique de confidentialité (pièces jointes transmises par e-mail, non conservées sur le serveur).
 Leçon : OVH bride l'envoi SMTP après plusieurs e-mails rapprochés (« data not accepted » / « MAIL FROM failed ») → espacer les tests, un seul envoi à la fois.
-Sécurité : le mot de passe de la boîte contact@ est faible (proche du nom de domaine) → lui recommander de le changer (espace client OVH, E-mails) puis mettre à jour `audit/mdp-contact.txt` ET la constante WPMS_SMTP_PASS de wp-config.php.
+2026-09-29 après-midi : formulaire test = zone glisser-déposer multi-fichiers (JS dans mu-plugin ct-formulaire.php, répartit jusqu'à 6 fichiers dans les champs CF7 ct-fichier-1..6 via DataTransfer ; repli un-par-un pour vieux navigateurs), 8 Mo/fichier, 20 Mo total (contrôle serveur wpcf7_validate). Elle a changé le mot de passe de contact@ le 2026-09-29 → mis à jour dans wp-config (WPMS_SMTP_PASS) et `audit/mdp-contact.txt` ; ancienne config dans `/home/ctarchq/wp-config.backup-20260928.php`.
+(Ancienne note) Sécurité : le mot de passe de la boîte contact@ est faible (proche du nom de domaine) → lui recommander de le changer (espace client OVH, E-mails) puis mettre à jour `audit/mdp-contact.txt` ET la constante WPMS_SMTP_PASS de wp-config.php.
 Historique de la demande : pièces jointes (photos/docs/PDF) dans le formulaire — non disponible dans WPForms Lite (champ File Upload = Pro payant). Options proposées : WPForms Pro (payant), ou remplacer le formulaire par une extension gratuite qui gère les fichiers, ou inviter à envoyer les fichiers en réponse à l'e-mail.
 
 Proposé, pas fait : supprimer l'ancienne sauvegarde ai1wm de mai 2026 (274 Mo, `wp-content/ai1wm-backups/`) — attendre son accord.

@@ -36,7 +36,7 @@ if ($a === 'create') {
 
 <div class="ct-fichiers">
 <span class="ct-titre">Photos, plans ou documents (facultatif)</span>
-<p class="ct-aide">Jusqu'à 6 fichiers (8 Mo maximum par fichier, 20 Mo au total) : photos (JPG, PNG, HEIC), PDF, Word ou plans (DWG). Un nouveau champ apparaît à chaque fichier ajouté.</p>
+<p class="ct-aide">Jusqu'à 6 fichiers (8 Mo maximum par fichier, 20 Mo au total) : photos (JPG, PNG, HEIC), PDF, Word ou plans (DWG).</p>
 [file ct-fichier-1 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
 [file ct-fichier-2 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
 [file ct-fichier-3 limit:8mb filetypes:jpg|jpeg|png|heic|heif|webp|pdf|doc|docx|dwg]
