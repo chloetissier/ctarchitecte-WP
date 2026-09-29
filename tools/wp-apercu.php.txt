@@ -1,0 +1,51 @@
+<?php
+// Script temporaire (supprimé juste après usage) : pages d'aperçu cachées et publication des contenus.
+// La clé réelle est injectée au déploiement depuis audit/cle-scripts-temporaires.txt (jamais versionnée).
+if (!isset($_GET['k']) || !hash_equals('CLE_A_GENERER', $_GET['k'])) { http_response_code(404); exit; }
+header('Content-Type: text/plain; charset=utf-8');
+$a = $_GET['a'] ?? '';
+
+if ($a === 'lint') {
+    $f = dirname(__DIR__) . '/' . basename($_GET['f'] ?? '');
+    try { token_get_all(file_get_contents($f), TOKEN_PARSE); echo "SYNTAX OK " . basename($f) . "\n"; }
+    catch (ParseError $e) { echo "SYNTAX ERROR line " . $e->getLine() . ": " . $e->getMessage() . "\n"; }
+    exit;
+}
+
+require __DIR__ . '/wp-load.php';
+$src = dirname(__DIR__) . '/legal/';
+
+// a=apercu&c=faq&t=Titre : crée/met à jour la page cachée /apercu-<c>/ (noindex) avec contenus/<c>.html
+if ($a === 'apercu') {
+    $c = preg_replace('/[^a-z0-9-]/', '', $_GET['c'] ?? '');
+    $content = @file_get_contents($src . $c . '.html');
+    if (!$content) { exit("ERR contenu $c absent"); }
+    $slug = 'apercu-' . $c;
+    $page = get_page_by_path($slug);
+    $d = ['post_title' => wp_unslash($_GET['t'] ?? 'Aperçu'), 'post_name' => $slug, 'post_content' => $content,
+          'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'closed'];
+    if ($page) { $d['ID'] = $page->ID; }
+    $id = $page ? wp_update_post(wp_slash($d)) : wp_insert_post(wp_slash($d));
+    update_post_meta($id, '_yoast_wpseo_meta-robots-noindex', '1');
+    wp_update_post(['ID' => $id]);
+    do_action('litespeed_purge_all');
+    echo "APERCU id=$id " . get_permalink($id) . "\n";
+    exit;
+}
+
+// a=publier&c=faq&id=111 : copie le contenu dans la vraie page, la rend visible à Google, supprime l'aperçu
+if ($a === 'publier') {
+    $c = preg_replace('/[^a-z0-9-]/', '', $_GET['c'] ?? '');
+    $id = (int) ($_GET['id'] ?? 0);
+    $content = @file_get_contents($src . $c . '.html');
+    if (!$content || !$id || get_post_type($id) !== 'page') { exit("ERR parametres"); }
+    file_put_contents(dirname(__DIR__) . "/page-$id-avant.txt", get_post_field('post_content', $id));
+    $r = wp_update_post(wp_slash(['ID' => $id, 'post_content' => $content]), true);
+    if (is_wp_error($r)) { exit('ERR ' . $r->get_error_message()); }
+    delete_post_meta($id, '_yoast_wpseo_meta-robots-noindex');
+    wp_update_post(['ID' => $id]);
+    if ($p = get_page_by_path('apercu-' . $c)) { wp_trash_post($p->ID); echo "apercu a la corbeille\n"; }
+    do_action('litespeed_purge_all');
+    echo "PUBLIE id=$id " . get_permalink($id) . "\n";
+    exit;
+}

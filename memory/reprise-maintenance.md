@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T12:44:46.654Z
+  modified: 2026-09-29T13:01:02.284Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -40,6 +40,7 @@ Reste :
 1b. Visibilité Google (demandé le 2026-09-29, site introuvable même sur son nom de domaine) : Search Console + sitemap (elle crée l'accès Google, je peux déposer le fichier de vérification), fiche Google Business Profile (elle), liens depuis Travaux.com / CFAI / LinkedIn vers le site, titre SEO de l'accueil (_yoast_wpseo_title page 109), contenu des pages vides ciblant « architecte d'intérieur Beaujolais / Villefranche / Lyon ». Concurrent homonyme : camillethomas.fr (« CT architecte d'intérieur »).
 2. Captcha : proposé Cloudflare Turnstile (gratuit, sans cookie publicitaire) → nécessite qu'elle crée un compte Cloudflare (sa décision). Ne pas utiliser reCAPTCHA (cookies Google → consentement).
 3. Notifications du formulaire envoyées à {admin_email} = chloetissier3@gmail.com (pas contact@) — à lui signaler.
+4a. FAQ (2026-09-29) : 15 questions rédigées avec elle (`contenus/faq.html` ; 1er RDV sur place 90 € déduit si devis signé ; PCMI + DP ; artisans assurés ; 3D en phase APD). Style + JSON-LD FAQPage auto : mu-plugin `ct-pages.php`. Aperçu caché `/apercu-faq/` (id 210, noindex). Outil générique `tools/wp-apercu.php.txt` (a=apercu / a=publier&id=111 → retire noindex + met l'aperçu à la corbeille), clé injectée depuis `audit/`. EN ATTENTE de sa validation de l'aperçu.
 4. Pages vides : Prestations (119), A propos (115), Réalisations (113, slug mes-realisations-2), FAQ (111) → lui faire des PROPOSITIONS avant publication (changement visible = son accord).
 
 **Why:** reprendre sans refaire l'état des lieux.
