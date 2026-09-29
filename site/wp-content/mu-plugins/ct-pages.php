@@ -65,9 +65,11 @@ add_action('wp_head', function () {
 .ct-presta .ct-rdv p:last-child{margin-bottom:0}
 .ct-presta a{color:#843A45}
 .ct-presta + .ct-faq-fin{margin-top:32px}
-/* Texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone */
-@media (min-width:768px){.ct-presta p:not(.has-text-align-center):not(.ct-presta-intro),.ct-apropos p:not(.has-text-align-center):not(.ct-accroche),.ct-faq p{text-align:justify;-webkit-hyphens:auto;hyphens:auto}}
-@media (max-width:767px){.ct-presta p,.ct-apropos p,.ct-faq p{text-align:left;-webkit-hyphens:manual;hyphens:manual}.ct-presta p.has-text-align-center,.ct-apropos p.has-text-align-center{text-align:center}}
+/* Toutes les pages : texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone.
+   Exclus : textes centrés/alignés, textes des encadrés à icône (Kadence), formulaires, accroches. */
+@media (min-width:768px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text):not(.ct-presta-intro):not(.ct-accroche):not(.ct-rgpd):not(.ct-aide):not(.ct-total){text-align:justify;-webkit-hyphens:auto;hyphens:auto}}
+@media (max-width:767px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text){text-align:left;-webkit-hyphens:manual;hyphens:manual}}
+body.page .entry-content .wpcf7 p{text-align:left!important;-webkit-hyphens:manual!important;hyphens:manual!important}
 @media (max-width:781px){.ct-presta h1{font-size:24px}.ct-presta .ct-bande{padding:24px 20px}.ct-presta .ct-bande .wp-block-columns{gap:8px}}
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}

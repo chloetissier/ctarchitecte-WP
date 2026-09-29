@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-09-29T14:24:23.477Z
+  modified: 2026-09-29T14:45:42.470Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -43,6 +43,7 @@ Reste :
 4a. FAQ (2026-09-29) : 15 questions rédigées avec elle (`contenus/faq.html` ; 1er RDV sur place 90 € déduit si devis signé ; PCMI + DP ; artisans assurés ; 3D en phase APD). Style + JSON-LD FAQPage auto : mu-plugin `ct-pages.php`. Aperçu caché `/apercu-faq/` (id 210, noindex). Outil générique `tools/wp-apercu.php.txt` (a=apercu / a=publier&id=111 → retire noindex + met l'aperçu à la corbeille), clé injectée depuis `audit/`. PUBLIÉE le 2026-09-29 sur /faq/ (id 111, indexable, dans le sitemap, 15 Q en 3 thèmes, JSON-LD FAQPage) ; aperçu 210 à la corbeille ; ancien contenu dans `/home/ctarchq/page-111-avant.txt`. Q7 : RDV découverte 90 € = déplacement + temps, PAS une séance de conseils (elle ne donne aucune idée sans analyse), CR + devis + CGV envoyés ensuite. Style validé : questions « Question N : » bordeaux 20 px, texte 16 px (calé sur l'accueil), séparateurs vert sauge 3 px, bandes de thème beige. Lui rappeler : demander l'indexation de /faq/ dans Search Console.
 4b. À propos (2026-09-29) : texte validé par elle (3 ans en agence spécialisée tertiaire), `contenus/a-propos.html` : photo (docs/images/chloe-tissier-architecte-interieur.jpg, EXIF retiré, source OneDrive Portrait pro/portrait - Copie.jpg) + H1 local + badges Kadence copiés de l'accueil (uniqueID 115_…) + accroche en Benedict + CTA. Titre Astra masqué (meta site-post-title=disabled). Aperçu `/apercu-a-propos/` (id 217). PUBLIÉE le 2026-09-29 sur /a-propos/ (id 115, indexable). Encadré final commun (.ct-faq-fin) = contour vert sauge 3 px, pas de fond ; +60 px avant le pied de page via #primary:has(.ct-faq-fin). Lui rappeler : demander l'indexation de /a-propos/ dans Search Console.
 4c. Prestations : elle a envoyé son texte le 2026-09-29 (4 forfaits : Conception, Maîtrise d'œuvre, Achat sur plan & TMA, Décoration + particuliers/pros + à la carte + 1er RDV). Ajustements validés par elle : forfait « Technique » (comme le flyer ; « maîtrise d'œuvre » en sous-titre), 90 € SANS « TTC » (micro-entreprise, TVA non applicable), « accompagnement ciblé » au lieu de « simple conseil », TMA explicité, Conception en Étape 1 / Étape 2 (3D en APD). `contenus/prestations.html`, styles .ct-presta dans ct-pages.php. Aperçu `/apercu-prestations/` (id 222). EN ATTENTE de sa validation → a=publier&c=prestations&id=119.
+Choix typographique global (2026-09-29, demandé par elle) : paragraphes justifiés + césure auto sur toutes les pages à partir de 768 px, alignés à gauche sans césure sur mobile (règle body.page .entry-content p dans ct-pages.php ; exclus : has-text-align-*, textes Kadence infobox, formulaires CF7, accroches).
 4. Pages vides : Prestations (119), A propos (115), Réalisations (113, slug mes-realisations-2), FAQ (111) → lui faire des PROPOSITIONS avant publication (changement visible = son accord).
 
 **Why:** reprendre sans refaire l'état des lieux.
