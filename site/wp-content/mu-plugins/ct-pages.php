@@ -94,11 +94,25 @@ body .entry-content h4{font-size:18px!important;font-weight:600!important}
 body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:700!important;color:#382A25!important}
 @media (max-width:781px){body .entry-content h1{font-size:24px!important}body .entry-content h2{font-size:21px!important}body .entry-content h3,body .entry-content h4{font-size:18px!important}}
 /* Introduction de la page Méthode dans un encadré beige */
-.ct-intro-encadre{background:#F5F1EE;border:3px solid #E7E1DC;border-radius:30px;padding:26px 32px;margin:0 auto 8px;max-width:1100px;color:#382A25}
+.ct-intro-encadre{background:#E7E1DC;border:3px solid #E7E1DC;border-radius:30px;padding:26px 32px;margin:0 auto 8px;max-width:1100px;color:#382A25}
 .ct-intro-encadre p{margin:0 0 12px}
 .ct-intro-encadre .ct-zone{display:flex;align-items:center;gap:12px;margin:16px 0 0;font-weight:600;text-align:left!important}
 /* Cartes vertes en ligne (rangées de 5) : même hauteur, icônes/chiffres, titres et textes alignés */
-:is(.kt-has-4-columns,.kt-has-5-columns){align-items:stretch!important}
+/* Cartes vertes (rangées de 4 et 5) : même vert pastel que les boutons */
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{background:#D4D9D0!important;border-color:#D4D9D0!important}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-text{margin-bottom:0!important}
+/* Mobile : texte des cartes centré, même espace au-dessus et en dessous */
+@media (max-width:767px){
+  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-title{min-height:0}
+  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{justify-content:center!important;padding-top:24px!important;padding-bottom:24px!important}
+  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media{margin-bottom:8px!important}
+}
+/* Pied de page sur mobile : marges sur les côtés et plus d'air */
+@media (max-width:921px){
+  .site-footer .site-below-footer-wrap,.site-footer .site-primary-footer-wrap{padding-left:20px!important;padding-right:20px!important}
+  .site-footer .site-below-footer-wrap{padding-top:24px!important;padding-bottom:24px!important}
+  .site-footer .ast-builder-html-element p,.site-footer .ast-footer-copyright p{margin-bottom:12px;line-height:1.6;text-align:center}
+}:is(.kt-has-4-columns,.kt-has-5-columns){align-items:stretch!important}
 :is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column,:is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column>.kt-inside-inner-col,:is(.kt-has-4-columns,.kt-has-5-columns) .wp-block-kadence-infobox{height:100%}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column;justify-content:flex-start!important}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media-container{flex:none}
