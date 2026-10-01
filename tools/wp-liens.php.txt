@@ -122,6 +122,26 @@ if ($a === 'methode-blanc') {
     exit;
 }
 
+// a=accueil-publics : remplace les rangées « photos » + « textes » Particuliers/Professionnels de l'accueil
+// par un bloc photo au-dessus du texte (comme la page Méthode, photos plus petites)
+if ($a === 'accueil-publics') {
+    $avant = get_post_field('post_content', 109);
+    file_put_contents(dirname(__DIR__) . '/page-109-avant-publics.txt', $avant);
+    $bloc = parse_blocks(file_get_contents(dirname(__DIR__) . '/legal/accueil-publics.html'));
+    $out = []; $fait = 0;
+    foreach (parse_blocks($avant) as $b) {
+        if ($b['blockName'] === 'kadence/rowlayout') {
+            $txt = serialize_block($b);
+            if (strpos($txt, '"id":174') !== false) { foreach ($bloc as $p) { if ($p['blockName']) { $out[] = $p; } } $fait++; echo "rangée photos remplacée\n"; continue; }
+            if (strpos($txt, 'Particuliers</h2>') !== false && strpos($txt, 'Professionnels</h2>') !== false) { $fait++; echo "rangée textes retirée (reprise dans le nouveau bloc)\n"; continue; }
+        }
+        $out[] = $b;
+    }
+    if ($fait === 2) { wp_update_post(['ID' => 109, 'post_content' => wp_slash(serialize_blocks($out))]); do_action('litespeed_purge_all'); echo "OK\n"; }
+    else { echo "ERREUR : $fait rangée(s) trouvée(s) sur 2, rien modifié\n"; }
+    exit;
+}
+
 // a=raw&id=N : contenu brut d'une page (blocs)
 if ($a === 'raw') { echo get_post_field('post_content', (int) $_GET['id']); exit; }
 

@@ -70,7 +70,11 @@ add_action('wp_head', function () {
 .ct-methode .ct-atout h3{color:#843A45;font-size:18px;margin:0 0 8px}
 .ct-methode .ct-atout p{text-align:left!important;-webkit-hyphens:manual!important;hyphens:manual!important}
 .ct-methode .ct-deux-publics{gap:40px;margin-top:18px}
-.ct-methode .ct-photo-arrondie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:30px}
+.ct-methode .ct-photo-arrondie img{width:100%;aspect-ratio:5/4;object-fit:cover;border-radius:30px}
+.ct-publics-accueil .wp-block-column{text-align:center}
+.ct-publics-accueil .ct-photo-arrondie{max-width:340px;margin:0 auto!important}
+.ct-publics-accueil h2{text-align:center;margin-top:18px}
+.ct-publics-accueil p{text-align:center!important;max-width:420px;margin-left:auto;margin-right:auto}
 .ct-methode .ct-deux-publics h3{color:#843A45;margin-top:18px}
 .ct-methode .ct-etapes{counter-reset:ctet;margin-top:18px}
 .ct-methode .ct-etape-bloc{counter-increment:ctet;position:relative;padding:4px 0 6px 68px;margin-bottom:18px;min-height:52px}
@@ -124,10 +128,12 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
 /* Encadré de fin de page : question en bordeaux, boutons verts, signature manuscrite */
 .ct-cta{max-width:820px;margin:56px auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
 .ct-cta p{text-align:center!important;-webkit-hyphens:manual!important;hyphens:manual!important}
-.ct-cta-titre{font-size:20px;font-weight:600;color:#843A45;margin:0 0 6px!important}
-.ct-cta-texte{margin:0 0 18px!important}
-.ct-cta-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 16px;margin-top:18px}
-.ct-cta-manuscrit{font-family:'Benedict',cursive;font-size:26px;line-height:1.3;color:#382A25;margin:18px 0 0!important}
+.ct-cta-titre{font-size:20px;font-weight:600;color:#843A45;margin:0!important}
+.ct-cta-texte{margin:6px 0 0!important}
+.ct-cta-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 16px;margin:24px 0!important}
+/* Boutons dans les pages : même espace au-dessus et en dessous */
+.entry-content .wp-block-buttons{margin-top:28px!important;margin-bottom:28px!important}
+.ct-cta-manuscrit{font-family:'Benedict',cursive;font-size:26px;line-height:1.3;color:#382A25;margin:0!important}
 @media (max-width:700px){.ct-cta-manuscrit{font-size:22px}}
 .ct-real{color:#382A25;font-size:16px;line-height:1.7}
 .ct-real h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 16px}
