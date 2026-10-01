@@ -70,8 +70,14 @@ function ct_blanchir($content) {
     $c = serialize_blocks($blocks);
     $corr = ['Budget maitrisé' => 'Budget maîtrisé', 'Rendez – vous' => 'Rendez-vous', 'rendez – vous' => 'rendez-vous', 'Rendez - vous' => 'Rendez-vous', 'rendez - vous' => 'rendez-vous',
              'levée de réserve' => 'levée des réserves', 'Vous savez  où' => 'Vous savez où', 'rangements et matériaux et coloris' => 'rangements, matériaux et coloris',
-             'réponse rapide par mail' => 'réponse rapide par e-mail'];
-    return str_replace(array_keys($corr), array_values($corr), $c);
+             'réponse rapide par mail' => 'réponse rapide par e-mail',
+             // retours à la ligne vides au début/à la fin des textes de cartes
+             '<p class="kt-blocks-info-box-text"><br>' => '<p class="kt-blocks-info-box-text">', '<br></p>' => '</p>'];
+    $c = str_replace(array_keys($corr), array_values($corr), $c);
+    // « Résultat : … » : phrase de conclusion (paragraphe), pas un titre
+    $c = preg_replace('#<!-- wp:heading \{[^\n]*?\} -->\s*<h2 class="wp-block-heading has-text-align-center"[^>]*>(Résultat[^<]*)</h2>\s*<!-- /wp:heading -->#u',
+        "<!-- wp:paragraph {\"align\":\"center\",\"className\":\"ct-conclusion\"} -->\n<p class=\"has-text-align-center ct-conclusion\">$1</p>\n<!-- /wp:paragraph -->", $c);
+    return $c;
 }
 
 // Méthode : titre pleine largeur (1 colonne, 30 px), bloc « deux publics » avec grandes photos, nouvel encadré final

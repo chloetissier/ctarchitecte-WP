@@ -120,6 +120,15 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
   .site-footer .site-below-footer-wrap,.site-footer .site-primary-footer-wrap{padding-left:20px!important;padding-right:20px!important}
   .site-footer .site-below-footer-wrap{padding-top:24px!important;padding-bottom:24px!important}
   .site-footer .ast-builder-html-element p,.site-footer .ast-footer-copyright p{margin-bottom:12px;line-height:1.6;text-align:center}
+}/* Cartes vertes : même espace entre titre et texte partout */
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-title{margin:4px 0 10px!important}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-text{margin-top:0!important}
+/* Phrase de conclusion (bordeaux, taille du texte) sur toutes les pages */
+.entry-content .ct-conclusion{color:#843A45;font-weight:600;font-size:17px}
+/* Mobile : rythme vertical régulier entre les sections (sauf la 1re rangée, ex. photo d'en-tête) */
+@media (max-width:767px){
+  .entry-content > .kb-row-layout-wrap:not(:first-child){padding-top:20px!important;padding-bottom:20px!important;margin-top:0!important;margin-bottom:0!important}
+  .ct-cta{margin-top:32px}
 }:is(.kt-has-4-columns,.kt-has-5-columns){align-items:stretch!important}
 :is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column,:is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column>.kt-inside-inner-col,:is(.kt-has-4-columns,.kt-has-5-columns) .wp-block-kadence-infobox{height:100%}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column}
