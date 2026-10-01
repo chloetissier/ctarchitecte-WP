@@ -82,7 +82,7 @@ add_action('wp_head', function () {
 @media (max-width:600px){.ct-methode .ct-atouts{grid-template-columns:1fr}}
 /* Tous les boutons du site : vert sauge plein, texte brun ; survol bordeaux, texte blanc.
    (Pas de « display » ici : Astra masque lui-même la version mobile du bouton d'en-tête.) */
-.entry-content .wp-block-button .wp-block-button__link,.ct-btn,.ct-form input[type=submit],.ast-custom-button{background:#A8B2A1!important;color:#382A25!important;border:0!important;border-radius:30px!important;padding:12px 30px!important;font-family:'Montserrat',sans-serif;font-weight:600!important;font-size:15px;text-decoration:none!important;transition:background .2s,color .2s}
+.entry-content .wp-block-button .wp-block-button__link,.ct-btn,.ct-form input[type=submit],.ast-custom-button{background:#D4D9D0!important;color:#382A25!important;border:0!important;border-radius:30px!important;padding:12px 30px!important;font-family:'Montserrat',sans-serif;font-weight:600!important;font-size:15px;text-decoration:none!important;transition:background .2s,color .2s}
 .ct-btn{display:inline-block}
 .entry-content .wp-block-button .wp-block-button__link:hover,.entry-content .wp-block-button .wp-block-button__link:focus-visible,.ct-btn:hover,.ct-btn:focus-visible,.ct-form input[type=submit]:hover,.ct-form input[type=submit]:focus-visible,.ast-custom-button-link:hover .ast-custom-button{background:#843A45!important;color:#fff!important;outline:none}
 /* Titres : même police, même couleur, même taille sur tout le site */
@@ -94,10 +94,15 @@ body .entry-content h4{font-size:18px!important;font-weight:600!important}
 body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:700!important;color:#382A25!important}
 @media (max-width:781px){body .entry-content h1{font-size:24px!important}body .entry-content h2{font-size:21px!important}body .entry-content h3,body .entry-content h4{font-size:18px!important}}
 /* Introduction de la page Méthode dans un encadré beige */
-.ct-intro-encadre{background:#E7E1DC;border-radius:30px;padding:28px 34px;margin:0 auto 8px;max-width:1100px;color:#382A25}
+.ct-intro-encadre{background:#fff;border:3px solid #E7E1DC;border-radius:30px;padding:26px 32px;margin:0 auto 8px;max-width:1100px;color:#382A25}
 .ct-intro-encadre p{margin:0 0 12px}
 .ct-intro-encadre .ct-zone{display:flex;align-items:center;gap:12px;margin:16px 0 0;font-weight:600;text-align:left!important}
-.ct-intro-encadre .ct-zone::before{content:"";flex:none;width:14px;height:14px;border-radius:50%;background:#A8B2A1;box-shadow:0 0 0 5px rgba(168,178,161,.35)}
+/* Cartes vertes en ligne (rangées de 5) : même hauteur, icônes/chiffres, titres et textes alignés */
+.kt-has-5-columns{align-items:stretch!important}
+.kt-has-5-columns>.wp-block-kadence-column,.kt-has-5-columns>.wp-block-kadence-column>.kt-inside-inner-col,.kt-has-5-columns .wp-block-kadence-infobox{height:100%}
+.kt-has-5-columns .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column;justify-content:flex-start!important}
+.kt-has-5-columns .kt-blocks-info-box-media-container{flex:none}
+.kt-has-5-columns .kt-blocks-info-box-title{min-height:2.6em;display:flex;align-items:flex-start;justify-content:center}
 /* Encadré de fin de page : question en bordeaux, boutons verts, signature manuscrite */
 .ct-cta{max-width:820px;margin:56px auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
 .ct-cta p{text-align:center!important;-webkit-hyphens:manual!important;hyphens:manual!important}
