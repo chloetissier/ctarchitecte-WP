@@ -53,6 +53,46 @@ function ct_relier(&$b, $map, &$n) {
     foreach ($b['innerBlocks'] as &$ib) { ct_relier($ib, $map, $n); }
 }
 
+// a=raw&id=N : contenu brut d'une page (blocs)
+if ($a === 'raw') { echo get_post_field('post_content', (int) $_GET['id']); exit; }
+
+// a=textes : titres de pages, éléments de menu et textes visibles, pour repérer les accents manquants
+if ($a === 'textes') {
+    foreach (get_pages(['post_status' => 'publish']) as $p) { echo "PAGE {$p->ID} titre=« {$p->post_title} » slug={$p->post_name}\n"; }
+    foreach (wp_get_nav_menu_items(18) as $m) { echo "MENU {$m->ID} « {$m->title} » -> {$m->url}\n"; }
+    $s = get_option('astra-settings');
+    foreach (['footer-html-1', 'footer-html-2', 'footer-copyright-editor'] as $k) { echo "ASTRA $k = " . wp_strip_all_tags($s[$k] ?? '') . "\n"; }
+    $mots = '/\b(A propos|Methode|methode|Ecole|Etape|Equipe|Etat|Elevation|Etude|Electricit|Evolution|Ete|deja|realis|reception|cle en main|creer|interieur|deco)\w*/u';
+    foreach (get_pages(['post_status' => 'publish']) as $p) {
+        $t = wp_strip_all_tags(get_post_field('post_content', $p->ID));
+        if (preg_match_all($mots, $t, $m)) { echo "SANS ACCENT page {$p->ID} : " . implode(' | ', array_unique($m[0])) . "\n"; }
+    }
+    exit;
+}
+
+// a=accents : titres de pages, menu et badge ESAIL
+if ($a === 'accents') {
+    foreach ([190 => 'Méthode', 115 => 'À propos'] as $id => $titre) {
+        wp_update_post(['ID' => $id, 'post_title' => $titre]);
+        echo "page $id -> $titre\n";
+    }
+    foreach (wp_get_nav_menu_items(18) as $m) {
+        $nouveau = ['Methode' => 'Méthode', 'A propos' => 'À propos'][$m->title] ?? null;
+        if ($nouveau) { wp_update_post(['ID' => $m->ID, 'post_title' => $nouveau]); echo "menu {$m->ID} -> $nouveau\n"; }
+    }
+    $remplacements = ['Ecole Supérieur d&rsquo;Architecture d&rsquo;intérieur de Lyon' => 'École Supérieure d&rsquo;Architecture Intérieure de Lyon',
+                      "Ecole Supérieur d'Architecture d'intérieur de Lyon" => "École Supérieure d'Architecture Intérieure de Lyon",
+                      'Ecole Supérieur d’Architecture d’intérieur de Lyon' => 'École Supérieure d’Architecture Intérieure de Lyon'];
+    foreach ([109, 115] as $id) {
+        $c = get_post_field('post_content', $id);
+        $n = 0; $c2 = str_replace(array_keys($remplacements), array_values($remplacements), $c, $n);
+        if ($n) { wp_update_post(['ID' => $id, 'post_content' => wp_slash($c2)]); }
+        echo "page $id : $n remplacement(s) ESAIL\n";
+    }
+    do_action('litespeed_purge_all');
+    exit;
+}
+
 if ($a === 'bouton') {
     $s = get_option('astra-settings');
     $s['header-button1-text'] = $_GET['t'] ?? 'Appelez-moi';

@@ -65,6 +65,21 @@ add_action('wp_head', function () {
 .ct-presta .ct-rdv p:last-child{margin-bottom:0}
 .ct-presta a{color:#843A45}
 .ct-presta + .ct-faq-fin{margin-top:32px}
+.ct-methode .ct-atouts{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.ct-methode .ct-atout{background:#E7E1DC;border-radius:24px;padding:22px 22px 8px}
+.ct-methode .ct-atout h3{color:#843A45;font-size:18px;margin:0 0 8px}
+.ct-methode .ct-atout p{text-align:left!important;-webkit-hyphens:manual!important;hyphens:manual!important}
+.ct-methode .ct-deux-publics{gap:40px;margin-top:18px}
+.ct-methode .ct-photo-arrondie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:30px}
+.ct-methode .ct-deux-publics h3{color:#843A45;margin-top:18px}
+.ct-methode .ct-etapes{counter-reset:ctet;margin-top:18px}
+.ct-methode .ct-etape-bloc{counter-increment:ctet;position:relative;padding:4px 0 6px 68px;margin-bottom:18px;min-height:52px}
+.ct-methode .ct-etape-bloc::before{content:counter(ctet);position:absolute;left:0;top:0;width:48px;height:48px;border-radius:50%;background:#A8B2A1;color:#382A25;font:700 20px/48px 'Montserrat',sans-serif;text-align:center}
+.ct-methode .ct-etape-bloc h3{margin:6px 0 4px;color:#382A25}
+.ct-methode .ct-etape-bloc p{margin:0}
+.ct-faq-fin .wp-block-buttons{gap:14px}
+@media (max-width:900px){.ct-methode .ct-atouts{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.ct-methode .ct-atouts{grid-template-columns:1fr}}
 .ct-real{color:#382A25;font-size:16px;line-height:1.7}
 .ct-real h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 16px}
 .ct-real .ct-real-intro{font-size:17px;margin-bottom:24px}
