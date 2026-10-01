@@ -101,12 +101,9 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
 /* Cartes vertes (rangées de 4 et 5) : même vert pastel que les boutons */
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{background:#D4D9D0!important;border-color:#D4D9D0!important}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-text{margin-bottom:0!important}
-/* Mobile : texte des cartes centré, même espace au-dessus et en dessous */
-@media (max-width:767px){
-  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-title{min-height:0}
-  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{justify-content:center!important;padding-top:24px!important;padding-bottom:24px!important}
-  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media{margin-bottom:8px!important}
-}
+/* Toutes tailles d'écran : contenu des cartes centré verticalement, même espace au-dessus et en dessous */
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{justify-content:center!important;padding-top:24px!important;padding-bottom:24px!important}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media{margin-bottom:8px!important}
 /* Pied de page sur mobile : marges sur les côtés et plus d'air */
 @media (max-width:921px){
   .site-footer .site-below-footer-wrap,.site-footer .site-primary-footer-wrap{padding-left:20px!important;padding-right:20px!important}
@@ -114,9 +111,9 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
   .site-footer .ast-builder-html-element p,.site-footer .ast-footer-copyright p{margin-bottom:12px;line-height:1.6;text-align:center}
 }:is(.kt-has-4-columns,.kt-has-5-columns){align-items:stretch!important}
 :is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column,:is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column>.kt-inside-inner-col,:is(.kt-has-4-columns,.kt-has-5-columns) .wp-block-kadence-infobox{height:100%}
-:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column;justify-content:flex-start!important}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media-container{flex:none}
-.kt-has-5-columns .kt-blocks-info-box-title{min-height:2.6em;display:flex;align-items:flex-start;justify-content:center}
+
 /* Encadré de fin de page : question en bordeaux, boutons verts, signature manuscrite */
 .ct-cta{max-width:820px;margin:56px auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
 .ct-cta p{text-align:center!important;-webkit-hyphens:manual!important;hyphens:manual!important}
