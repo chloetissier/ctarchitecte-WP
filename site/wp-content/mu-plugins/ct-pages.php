@@ -101,9 +101,16 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
 /* Cartes vertes (rangées de 4 et 5) : même vert pastel que les boutons */
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{background:#D4D9D0!important;border-color:#D4D9D0!important}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-text{margin-bottom:0!important}
-/* Toutes tailles d'écran : contenu des cartes centré verticalement, même espace au-dessus et en dessous */
-:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{justify-content:center!important;padding-top:24px!important;padding-bottom:24px!important}
+/* Ordinateur et tablette : chiffres/icônes, titres et textes alignés d'une carte à l'autre
+   (titres sur une hauteur fixe de 2 lignes) ; même espace en haut et en bas */
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{justify-content:flex-start!important;padding-top:24px!important;padding-bottom:24px!important}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media{margin-bottom:8px!important}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-title{min-height:2.6em;display:flex;align-items:flex-start;justify-content:center}
+/* Mobile (cartes empilées) : contenu centré verticalement, validé tel quel */
+@media (max-width:767px){
+  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{justify-content:center!important}
+  :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-title{min-height:0}
+}
 /* Pied de page sur mobile : marges sur les côtés et plus d'air */
 @media (max-width:921px){
   .site-footer .site-below-footer-wrap,.site-footer .site-primary-footer-wrap{padding-left:20px!important;padding-right:20px!important}
