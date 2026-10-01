@@ -74,10 +74,38 @@ function ct_blanchir($content) {
     return str_replace(array_keys($corr), array_values($corr), $c);
 }
 
-// a=methode-blanc : aperçu caché de la page Méthode transformée + propositions d'encadré final
+// Méthode : titre pleine largeur (1 colonne, 30 px), bloc « deux publics » avec grandes photos, nouvel encadré final
+function ct_methode($content) {
+    $dir = dirname(__DIR__) . '/legal/';
+    $publics = parse_blocks(file_get_contents($dir . 'methode-publics.html'));
+    $cta = parse_blocks(file_get_contents($dir . 'cta-methode.html'));
+    $out = []; $premiere = true;
+    foreach (parse_blocks($content) as $b) {
+        if ($b['blockName'] === 'kadence/rowlayout') {
+            $txt = serialize_block($b);
+            if ($premiere) {
+                $premiere = false;
+                // Retire la 2e colonne vide (place de l'ancienne photo) et passe la rangée en 1 colonne
+                if (count($b['innerBlocks']) === 2 && empty($b['innerBlocks'][1]['innerBlocks'])) {
+                    array_pop($b['innerBlocks']);
+                    $nulls = array_keys($b['innerContent'], null, true);
+                    array_splice($b['innerContent'], end($nulls), 1);
+                    $b['attrs']['columns'] = 1;
+                    echo "1re rangée : 2e colonne vide retirée\n";
+                }
+            } elseif (strpos($txt, '"id":174') !== false) { foreach ($publics as $p) { if ($p['blockName']) { $out[] = $p; } } echo "bloc deux publics remplacé\n"; continue; }
+            elseif (strpos($txt, 'Découvrez mes réalisations') !== false) { foreach ($cta as $p) { if ($p['blockName']) { $out[] = $p; } } echo "boutons du bas remplacés par l'encadré\n"; continue; }
+        }
+        $out[] = $b;
+    }
+    $c = serialize_blocks($out);
+    return str_replace(['"fontSize":"36px"', 'font-size:36px'], ['"fontSize":"30px"', 'font-size:30px'], $c);
+}
+
+// a=methode-blanc : aperçu caché de la page Méthode transformée
 if ($a === 'methode-blanc') {
-    $c = ct_blanchir(get_post_field('post_content', 190));
-    $opts = @file_get_contents(dirname(__DIR__) . '/legal/cta-options.html');
+    $c = ct_methode(ct_blanchir(get_post_field('post_content', 190)));
+    $opts = '';
     $slug = 'apercu-methode';
     $page = get_page_by_path($slug);
     $d = ['post_title' => 'Méthode', 'post_name' => $slug, 'post_content' => $c . "\n\n" . $opts, 'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'closed'];

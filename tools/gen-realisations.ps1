@@ -116,19 +116,14 @@ foreach ($p in $projets) {
 [void]$h.AppendLine("`n</div>`n<!-- /wp:group -->")
 [void]$h.AppendLine(@'
 
-<!-- wp:group {"className":"ct-faq-fin","layout":{"type":"constrained"}} -->
-<div class="wp-block-group ct-faq-fin">
-<!-- wp:paragraph {"align":"center"} -->
-<p class="has-text-align-center"><strong>Et si votre projet était le prochain ?</strong><br>Parlons-en : je vous accompagne à chaque étape, de l'idée à la réalisation.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
-<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-outline"} -->
-<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/contact/">Contactez-moi</a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons -->
+<!-- wp:html -->
+<div class="ct-cta">
+<p class="ct-cta-titre">Et si votre projet était le prochain ?</p>
+<p class="ct-cta-texte">Parlons-en : je vous accompagne à chaque étape, de l'idée à la réalisation.</p>
+<div class="ct-cta-actions"><a class="ct-btn" href="/contact/">Contactez-moi</a><a class="ct-btn" href="/mes-prestations/">Découvrez mes prestations</a></div>
+<p class="ct-cta-manuscrit">Révélons ensemble le potentiel de vos espaces</p>
 </div>
-<!-- /wp:group -->
+<!-- /wp:html -->
 '@)
 $out = Join-Path (Split-Path $PSScriptRoot) 'contenus\realisations.html'
 [IO.File]::WriteAllText($out, $h.ToString().Replace('{apos}', [string][char]0x2019), (New-Object Text.UTF8Encoding $false))

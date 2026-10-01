@@ -27,7 +27,7 @@ add_action('wp_head', function () {
 .ct-faq a,.ct-faq-intro a{color:#843A45}
 .ct-faq-fin{background:transparent;border:3px solid #A8B2A1;border-radius:30px;padding:16px 20px;margin-top:40px;max-width:820px;color:#382A25}
 /* Même espace avant le pied de page que sur les pages avec titre (Astra : 60 px sur ordinateur) */
-@media (min-width:922px){.ast-plain-container.ast-no-sidebar #primary:has(.ct-faq-fin){margin-bottom:60px}}
+@media (min-width:922px){.ast-plain-container.ast-no-sidebar #primary:has(.ct-faq-fin),.ast-plain-container.ast-no-sidebar #primary:has(.ct-cta){margin-bottom:60px}}
 .ct-faq-fin p{margin-bottom:12px}
 .ct-faq-fin .wp-block-buttons{margin-top:4px}
 .ct-faq-fin .wp-block-button .wp-block-button__link{border:3px solid #A8B2A1!important;border-radius:30px;color:#382A25!important;background:transparent!important;padding:10px 32px;font-weight:600}
@@ -80,23 +80,17 @@ add_action('wp_head', function () {
 .ct-faq-fin .wp-block-buttons{gap:14px}
 @media (max-width:900px){.ct-methode .ct-atouts{grid-template-columns:1fr 1fr}}
 @media (max-width:600px){.ct-methode .ct-atouts{grid-template-columns:1fr}}
-/* Encadrés de fin de page (propositions A, B, C) */
-.ct-option-label{margin:56px auto 8px!important;max-width:820px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#A8B2A1;text-align:center!important}
-.ct-cta{max-width:820px;margin:0 auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
+/* Tous les boutons du site : vert sauge plein, texte brun ; survol bordeaux, texte blanc */
+.entry-content .wp-block-button .wp-block-button__link,.ct-btn,.ct-form input[type=submit],.ast-custom-button,.ast-builder-button-wrap .menu-link{display:inline-block;background:#A8B2A1!important;color:#382A25!important;border:0!important;border-radius:30px!important;padding:12px 30px!important;font-family:'Montserrat',sans-serif;font-weight:600!important;font-size:15px;text-decoration:none!important;transition:background .2s,color .2s}
+.entry-content .wp-block-button .wp-block-button__link:hover,.entry-content .wp-block-button .wp-block-button__link:focus-visible,.ct-btn:hover,.ct-btn:focus-visible,.ct-form input[type=submit]:hover,.ct-form input[type=submit]:focus-visible,.ast-custom-button-link:hover .ast-custom-button,.ast-builder-button-wrap .menu-link:hover{background:#843A45!important;color:#fff!important;outline:none}
+/* Encadré de fin de page : question en bordeaux, boutons verts, signature manuscrite */
+.ct-cta{max-width:820px;margin:56px auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
 .ct-cta p{text-align:center!important;-webkit-hyphens:manual!important;hyphens:manual!important}
-.ct-cta-titre{font-size:20px;font-weight:600;color:#843A45;margin:0 0 18px!important}
-.ct-cta-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 28px}
-.ct-btn-plein{display:inline-block;background:#843A45;color:#fff!important;border-radius:30px;padding:12px 32px;font-weight:600;text-decoration:none!important;transition:background .2s}
-.ct-btn-plein:hover,.ct-btn-plein:focus-visible{background:#382A25;outline:none}
-.ct-lien-fleche{color:#382A25!important;font-weight:600;text-decoration:underline;text-decoration-color:#A8B2A1;text-decoration-thickness:2px;text-underline-offset:6px}
-.ct-lien-fleche:hover{text-decoration-color:#843A45}
-.ct-cta-a{border-top:3px solid #A8B2A1;padding-top:32px}
-.ct-cta-b .ct-cta-manuscrit{font-family:'Benedict',cursive;font-size:38px;line-height:1.3;color:#382A25;margin:0 0 6px!important}
-.ct-cta-b .ct-cta-texte{margin:0 0 18px!important}
-.ct-cta-c{display:flex;align-items:center;justify-content:space-between;gap:16px 24px;background:#E7E1DC;border-radius:30px;padding:18px 18px 18px 32px;text-align:left}
-.ct-cta-c .ct-cta-titre{margin:0!important;font-size:17px;text-align:left!important}
-.ct-cta-c .ct-cta-actions{flex:none;gap:10px 20px}
-@media (max-width:700px){.ct-cta-c{flex-direction:column;text-align:center;padding:22px}.ct-cta-c .ct-cta-titre{text-align:center!important}.ct-cta-b .ct-cta-manuscrit{font-size:30px}}
+.ct-cta-titre{font-size:20px;font-weight:600;color:#843A45;margin:0 0 6px!important}
+.ct-cta-texte{margin:0 0 18px!important}
+.ct-cta-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 16px;margin-top:18px}
+.ct-cta-manuscrit{font-family:'Benedict',cursive;font-size:38px;line-height:1.3;color:#382A25;margin:22px 0 0!important}
+@media (max-width:700px){.ct-cta-manuscrit{font-size:30px}}
 .ct-real{color:#382A25;font-size:16px;line-height:1.7}
 .ct-real h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 16px}
 .ct-real .ct-real-intro{font-size:17px;margin-bottom:24px}
