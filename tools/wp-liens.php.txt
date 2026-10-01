@@ -53,6 +53,45 @@ function ct_relier(&$b, $map, &$n) {
     foreach ($b['innerBlocks'] as &$ib) { ct_relier($ib, $map, $n); }
 }
 
+// Transforme une page Kadence : fonds blancs, sans image de fond (hero), coquilles corrigées
+function ct_blanchir($content) {
+    $blocks = parse_blocks($content);
+    $f = function (&$b) use (&$f) {
+        if ($b['blockName'] === 'kadence/rowlayout') {
+            foreach (['bgImg', 'bgImgID', 'bgImgPosition', 'overlayGradient', 'currentOverlayTab', 'overlayOpacity'] as $k) { unset($b['attrs'][$k]); }
+            $b['attrs']['bgColor'] = '';
+            if (!empty($b['attrs']['mobileBackground'][0])) { $b['attrs']['mobileBackground'][0]['enable'] = false; $b['attrs']['mobileBackground'][0]['bgImg'] = ''; $b['attrs']['mobileBackground'][0]['bgImgID'] = ''; }
+            if (!empty($b['attrs']['mobileOverlay'][0])) { $b['attrs']['mobileOverlay'][0]['enable'] = false; }
+        }
+        foreach ($b['innerBlocks'] as &$ib) { $f($ib); }
+    };
+    foreach ($blocks as &$b) { $f($b); }
+    unset($b);
+    $c = serialize_blocks($blocks);
+    $corr = ['Budget maitrisé' => 'Budget maîtrisé', 'Rendez – vous' => 'Rendez-vous', 'rendez – vous' => 'rendez-vous', 'Rendez - vous' => 'Rendez-vous', 'rendez - vous' => 'rendez-vous',
+             'levée de réserve' => 'levée des réserves', 'Vous savez  où' => 'Vous savez où', 'rangements et matériaux et coloris' => 'rangements, matériaux et coloris',
+             'réponse rapide par mail' => 'réponse rapide par e-mail'];
+    return str_replace(array_keys($corr), array_values($corr), $c);
+}
+
+// a=methode-blanc : aperçu caché de la page Méthode transformée + propositions d'encadré final
+if ($a === 'methode-blanc') {
+    $c = ct_blanchir(get_post_field('post_content', 190));
+    $opts = @file_get_contents(dirname(__DIR__) . '/legal/cta-options.html');
+    $slug = 'apercu-methode';
+    $page = get_page_by_path($slug);
+    $d = ['post_title' => 'Méthode', 'post_name' => $slug, 'post_content' => $c . "\n\n" . $opts, 'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'closed'];
+    if ($page) { $d['ID'] = $page->ID; }
+    $id = $page ? wp_update_post(wp_slash($d)) : wp_insert_post(wp_slash($d));
+    update_post_meta($id, '_yoast_wpseo_meta-robots-noindex', '1');
+    foreach (['site-post-title', 'ast-site-content-layout', 'site-content-layout', 'ast-main-header-display', 'theme-transparent-header-meta'] as $m) {
+        $v = get_post_meta(190, $m, true); if ($v !== '') { update_post_meta($id, $m, $v); }
+    }
+    do_action('litespeed_purge_all');
+    echo "APERCU id=$id " . get_permalink($id) . " / rangées sans fond : " . substr_count($c, '"bgColor":""') . " / hero restant : " . (strpos($c, 'HERO.png') !== false ? 'oui' : 'non') . "\n";
+    exit;
+}
+
 // a=raw&id=N : contenu brut d'une page (blocs)
 if ($a === 'raw') { echo get_post_field('post_content', (int) $_GET['id']); exit; }
 
