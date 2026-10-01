@@ -94,14 +94,14 @@ body .entry-content h4{font-size:18px!important;font-weight:600!important}
 body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:700!important;color:#382A25!important}
 @media (max-width:781px){body .entry-content h1{font-size:24px!important}body .entry-content h2{font-size:21px!important}body .entry-content h3,body .entry-content h4{font-size:18px!important}}
 /* Introduction de la page Méthode dans un encadré beige */
-.ct-intro-encadre{background:#fff;border:3px solid #E7E1DC;border-radius:30px;padding:26px 32px;margin:0 auto 8px;max-width:1100px;color:#382A25}
+.ct-intro-encadre{background:#F5F1EE;border:3px solid #E7E1DC;border-radius:30px;padding:26px 32px;margin:0 auto 8px;max-width:1100px;color:#382A25}
 .ct-intro-encadre p{margin:0 0 12px}
 .ct-intro-encadre .ct-zone{display:flex;align-items:center;gap:12px;margin:16px 0 0;font-weight:600;text-align:left!important}
 /* Cartes vertes en ligne (rangées de 5) : même hauteur, icônes/chiffres, titres et textes alignés */
-.kt-has-5-columns{align-items:stretch!important}
-.kt-has-5-columns>.wp-block-kadence-column,.kt-has-5-columns>.wp-block-kadence-column>.kt-inside-inner-col,.kt-has-5-columns .wp-block-kadence-infobox{height:100%}
-.kt-has-5-columns .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column;justify-content:flex-start!important}
-.kt-has-5-columns .kt-blocks-info-box-media-container{flex:none}
+:is(.kt-has-4-columns,.kt-has-5-columns){align-items:stretch!important}
+:is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column,:is(.kt-has-4-columns,.kt-has-5-columns)>.wp-block-kadence-column>.kt-inside-inner-col,:is(.kt-has-4-columns,.kt-has-5-columns) .wp-block-kadence-infobox{height:100%}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-link-wrap{height:100%;display:flex!important;flex-direction:column;justify-content:flex-start!important}
+:is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-media-container{flex:none}
 .kt-has-5-columns .kt-blocks-info-box-title{min-height:2.6em;display:flex;align-items:flex-start;justify-content:center}
 /* Encadré de fin de page : question en bordeaux, boutons verts, signature manuscrite */
 .ct-cta{max-width:820px;margin:56px auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
