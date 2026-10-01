@@ -80,17 +80,32 @@ add_action('wp_head', function () {
 .ct-faq-fin .wp-block-buttons{gap:14px}
 @media (max-width:900px){.ct-methode .ct-atouts{grid-template-columns:1fr 1fr}}
 @media (max-width:600px){.ct-methode .ct-atouts{grid-template-columns:1fr}}
-/* Tous les boutons du site : vert sauge plein, texte brun ; survol bordeaux, texte blanc */
-.entry-content .wp-block-button .wp-block-button__link,.ct-btn,.ct-form input[type=submit],.ast-custom-button,.ast-builder-button-wrap .menu-link{display:inline-block;background:#A8B2A1!important;color:#382A25!important;border:0!important;border-radius:30px!important;padding:12px 30px!important;font-family:'Montserrat',sans-serif;font-weight:600!important;font-size:15px;text-decoration:none!important;transition:background .2s,color .2s}
-.entry-content .wp-block-button .wp-block-button__link:hover,.entry-content .wp-block-button .wp-block-button__link:focus-visible,.ct-btn:hover,.ct-btn:focus-visible,.ct-form input[type=submit]:hover,.ct-form input[type=submit]:focus-visible,.ast-custom-button-link:hover .ast-custom-button,.ast-builder-button-wrap .menu-link:hover{background:#843A45!important;color:#fff!important;outline:none}
+/* Tous les boutons du site : vert sauge plein, texte brun ; survol bordeaux, texte blanc.
+   (Pas de « display » ici : Astra masque lui-même la version mobile du bouton d'en-tête.) */
+.entry-content .wp-block-button .wp-block-button__link,.ct-btn,.ct-form input[type=submit],.ast-custom-button{background:#A8B2A1!important;color:#382A25!important;border:0!important;border-radius:30px!important;padding:12px 30px!important;font-family:'Montserrat',sans-serif;font-weight:600!important;font-size:15px;text-decoration:none!important;transition:background .2s,color .2s}
+.ct-btn{display:inline-block}
+.entry-content .wp-block-button .wp-block-button__link:hover,.entry-content .wp-block-button .wp-block-button__link:focus-visible,.ct-btn:hover,.ct-btn:focus-visible,.ct-form input[type=submit]:hover,.ct-form input[type=submit]:focus-visible,.ast-custom-button-link:hover .ast-custom-button{background:#843A45!important;color:#fff!important;outline:none}
+/* Titres : même police, même couleur, même taille sur tout le site */
+body .entry-content h1,body .entry-content h2,body .entry-content h3,body .entry-content h4{font-family:'Montserrat',sans-serif!important;color:#843A45!important;line-height:1.3}
+body .entry-content h1{font-size:30px!important;font-weight:700!important}
+body .entry-content h2{font-size:24px!important;font-weight:600!important}
+body .entry-content h3{font-size:20px!important;font-weight:600!important}
+body .entry-content h4{font-size:18px!important;font-weight:600!important}
+body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:700!important;color:#382A25!important}
+@media (max-width:781px){body .entry-content h1{font-size:24px!important}body .entry-content h2{font-size:21px!important}body .entry-content h3,body .entry-content h4{font-size:18px!important}}
+/* Introduction de la page Méthode dans un encadré beige */
+.ct-intro-encadre{background:#E7E1DC;border-radius:30px;padding:28px 34px;margin:0 auto 8px;max-width:1100px;color:#382A25}
+.ct-intro-encadre p{margin:0 0 12px}
+.ct-intro-encadre .ct-zone{display:flex;align-items:center;gap:12px;margin:16px 0 0;font-weight:600;text-align:left!important}
+.ct-intro-encadre .ct-zone::before{content:"";flex:none;width:14px;height:14px;border-radius:50%;background:#A8B2A1;box-shadow:0 0 0 5px rgba(168,178,161,.35)}
 /* Encadré de fin de page : question en bordeaux, boutons verts, signature manuscrite */
 .ct-cta{max-width:820px;margin:56px auto 24px;text-align:center;color:#382A25;font-family:'Montserrat',sans-serif}
 .ct-cta p{text-align:center!important;-webkit-hyphens:manual!important;hyphens:manual!important}
 .ct-cta-titre{font-size:20px;font-weight:600;color:#843A45;margin:0 0 6px!important}
 .ct-cta-texte{margin:0 0 18px!important}
 .ct-cta-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 16px;margin-top:18px}
-.ct-cta-manuscrit{font-family:'Benedict',cursive;font-size:38px;line-height:1.3;color:#382A25;margin:22px 0 0!important}
-@media (max-width:700px){.ct-cta-manuscrit{font-size:30px}}
+.ct-cta-manuscrit{font-family:'Benedict',cursive;font-size:26px;line-height:1.3;color:#382A25;margin:18px 0 0!important}
+@media (max-width:700px){.ct-cta-manuscrit{font-size:22px}}
 .ct-real{color:#382A25;font-size:16px;line-height:1.7}
 .ct-real h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:30px;line-height:1.3;color:#843A45;margin:0 0 16px}
 .ct-real .ct-real-intro{font-size:17px;margin-bottom:24px}
@@ -143,6 +158,20 @@ body.page .entry-content .wpcf7 p{text-align:left!important;-webkit-hyphens:manu
 </style>
     <?php
 }, 100);
+
+// Typographie française : espace insécable avant : ; ! ? » et après « (jamais de « : » en début de ligne).
+// Ne touche qu'au texte, jamais aux balises, styles ou scripts.
+add_filter('the_content', function ($html) {
+    if (is_admin() || $html === '') { return $html; }
+    $parts = preg_split('#(<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>)#i', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
+    foreach ($parts as $i => $p) {
+        if ($p === '' || $p[0] === '<') { continue; }
+        $p = preg_replace('/(?:[ \t\x{00A0}\x{202F}]|&nbsp;)+([:;!?»])/u', "\u{00A0}$1", $p);
+        $p = preg_replace('/«(?:[ \t\x{00A0}\x{202F}]|&nbsp;)+/u', "«\u{00A0}", $p);
+        $parts[$i] = $p;
+    }
+    return implode('', $parts);
+}, 99);
 
 // Bouton « Appelez-moi » de l'en-tête : sur téléphone le lien tel: ouvre l'appel ;
 // sur ordinateur (souris), le premier clic affiche le numéro à la place du texte.

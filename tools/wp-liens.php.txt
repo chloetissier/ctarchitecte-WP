@@ -79,6 +79,7 @@ function ct_methode($content) {
     $dir = dirname(__DIR__) . '/legal/';
     $publics = parse_blocks(file_get_contents($dir . 'methode-publics.html'));
     $cta = parse_blocks(file_get_contents($dir . 'cta-methode.html'));
+    $intro = parse_blocks(file_get_contents($dir . 'methode-intro.html'));
     $out = []; $premiere = true;
     foreach (parse_blocks($content) as $b) {
         if ($b['blockName'] === 'kadence/rowlayout') {
@@ -93,7 +94,8 @@ function ct_methode($content) {
                     $b['attrs']['columns'] = 1;
                     echo "1re rangée : 2e colonne vide retirée\n";
                 }
-            } elseif (strpos($txt, '"id":174') !== false) { foreach ($publics as $p) { if ($p['blockName']) { $out[] = $p; } } echo "bloc deux publics remplacé\n"; continue; }
+            } elseif (strpos($txt, 'Chaque projet est unique') !== false) { foreach ($intro as $p) { if ($p['blockName']) { $out[] = $p; } } echo "introduction remplacée par l'encadré beige\n"; continue; }
+            elseif (strpos($txt, '"id":174') !== false) { foreach ($publics as $p) { if ($p['blockName']) { $out[] = $p; } } echo "bloc deux publics remplacé\n"; continue; }
             elseif (strpos($txt, 'Découvrez mes réalisations') !== false) { foreach ($cta as $p) { if ($p['blockName']) { $out[] = $p; } } echo "boutons du bas remplacés par l'encadré\n"; continue; }
         }
         $out[] = $b;
