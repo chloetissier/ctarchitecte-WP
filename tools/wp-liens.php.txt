@@ -1,0 +1,85 @@
+<?php
+// Script temporaire (supprimé juste après usage) : boutons sans lien, bouton d'appel de l'en-tête, chargement JS de LiteSpeed.
+// La clé réelle est injectée au déploiement depuis audit/cle-scripts-temporaires.txt (jamais versionnée).
+if (!isset($_GET['k']) || !hash_equals('CLE_A_GENERER', $_GET['k'])) { http_response_code(404); exit; }
+header('Content-Type: text/plain; charset=utf-8');
+require __DIR__ . '/wp-load.php';
+kses_remove_filters();
+$a = $_GET['a'] ?? 'diag';
+
+// Boutons à relier : texte du bouton => destination
+$liens = [
+    109 => ['Découvrez ma méthode' => '/methode/', 'Contactez-moi' => '/contact/', 'Découvrez mes prestations à la carte' => '/mes-prestations/', 'Contactez-moi pour discuter de votre projet' => '/contact/'],
+    190 => ['Découvrez mes réalisations' => '/mes-realisations-2/', 'Contactez-moi pour discuter de votre projet' => '/contact/'],
+];
+
+if ($a === 'diag') {
+    foreach (['optm-js_defer', 'optm-js_defer_exc', 'optm-js_comb', 'optm-js_min', 'optm-js_delay_inc', 'optm-ucss', 'optm-guest_only'] as $o) {
+        echo "litespeed.$o = " . json_encode(get_option("litespeed.conf.$o")) . "\n";
+    }
+    $s = get_option('astra-settings');
+    echo "bouton entete texte = " . json_encode($s['header-button1-text'] ?? null) . " / lien = " . json_encode($s['header-button1-link-option'] ?? null) . "\n";
+    echo "mobile popup items = " . json_encode($s['header-mobile-popup-items'] ?? null) . "\n";
+    echo "mobile header items = " . json_encode($s['header-mobile-items'] ?? null) . "\n";
+    echo "mobile menu type = " . json_encode($s['mobile-header-type'] ?? null) . "\n";
+    echo "emplacements menus = " . json_encode(get_nav_menu_locations()) . "\n";
+    foreach ($liens as $id => $map) {
+        foreach (parse_blocks(get_post_field('post_content', $id)) as $b) { ct_liste($b, $id); }
+    }
+    exit;
+}
+
+function ct_liste($b, $id) {
+    if ($b['blockName'] === 'core/button') {
+        echo "page $id bouton : " . trim(wp_strip_all_tags($b['innerHTML'])) . " | url=" . ($b['attrs']['url'] ?? '(aucune)') . "\n";
+    }
+    foreach ($b['innerBlocks'] as $ib) { ct_liste($ib, $id); }
+}
+
+function ct_relier(&$b, $map, &$n) {
+    if ($b['blockName'] === 'core/button' && empty($b['attrs']['url'])) {
+        $texte = trim(html_entity_decode(wp_strip_all_tags($b['innerHTML']), ENT_QUOTES, 'UTF-8'));
+        $texte = str_replace(['’', "\u{00A0}"], ["'", ' '], $texte);
+        if (isset($map[$texte])) {
+            $url = $map[$texte];
+            $b['attrs']['url'] = $url;
+            $fix = function ($h) use ($url) { return preg_replace('#<a (class="wp-block-button__link)#', '<a href="' . esc_url($url) . '" $1', $h, 1); };
+            $b['innerHTML'] = $fix($b['innerHTML']);
+            foreach ($b['innerContent'] as $i => $c) { if (is_string($c)) { $b['innerContent'][$i] = $fix($c); } }
+            $n++;
+            echo "  relié : $texte -> $url\n";
+        }
+    }
+    foreach ($b['innerBlocks'] as &$ib) { ct_relier($ib, $map, $n); }
+}
+
+if ($a === 'fix') {
+    // 1. Boutons sans destination
+    foreach ($liens as $id => $map) {
+        $avant = get_post_field('post_content', $id);
+        file_put_contents(dirname(__DIR__) . "/page-$id-avant-liens.txt", $avant);
+        $blocks = parse_blocks($avant);
+        $n = 0;
+        foreach ($blocks as &$b) { ct_relier($b, $map, $n); }
+        unset($b);
+        if ($n) { wp_update_post(['ID' => $id, 'post_content' => wp_slash(serialize_blocks($blocks))]); }
+        echo "page $id : $n bouton(s) relié(s)\n";
+    }
+    // 2. Bouton d'appel de l'en-tête : afficher le numéro (utile aussi sur ordinateur)
+    $s = get_option('astra-settings');
+    $s['header-button1-text'] = '07 63 98 74 33';
+    update_option('astra-settings', $s);
+    echo "bouton entete -> " . $s['header-button1-text'] . "\n";
+    // 3. Menu mobile : placer le menu dans le contenu du menu déroulant mobile (il était vide)
+    $s = get_option('astra-settings');
+    echo "AVANT contenu menu mobile = " . json_encode($s['header-mobile-items']['popup'] ?? null) . "\n";
+    $s['header-mobile-items']['popup']['popup_content'] = ['mobile-menu', 'button-1'];
+    update_option('astra-settings', $s);
+    echo "APRES contenu menu mobile = " . json_encode($s['header-mobile-items']['popup']) . "\n";
+    // Le menu mobile utilise l'emplacement « mobile_menu » : on y met le même menu que le menu principal
+    $loc = get_nav_menu_locations();
+    if (empty($loc['mobile_menu']) && !empty($loc['primary'])) { $loc['mobile_menu'] = $loc['primary']; set_theme_mod('nav_menu_locations', $loc); }
+    echo "APRES emplacements menus = " . json_encode(get_nav_menu_locations()) . "\n";
+    do_action('litespeed_purge_all');
+    echo "OK\n";
+}
