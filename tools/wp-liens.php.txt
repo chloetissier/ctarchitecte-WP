@@ -148,6 +148,20 @@ if ($a === 'accueil-publics') {
     exit;
 }
 
+// a=methode-publier : applique la version validée à la vraie page Méthode (190), supprime l'aperçu
+if ($a === 'methode-publier') {
+    $avant = get_post_field('post_content', 190);
+    file_put_contents(dirname(__DIR__) . '/page-190-avant-publication.txt', $avant);
+    $c = ct_methode(ct_blanchir($avant));
+    $r = wp_update_post(['ID' => 190, 'post_content' => wp_slash($c)], true);
+    if (is_wp_error($r)) { exit('ERR ' . $r->get_error_message()); }
+    delete_post_meta(190, '_yoast_wpseo_meta-robots-noindex');
+    if ($p = get_page_by_path('apercu-methode')) { wp_trash_post($p->ID); echo "aperçu à la corbeille\n"; }
+    do_action('litespeed_purge_all');
+    echo "PUBLIE " . get_permalink(190) . "\n";
+    exit;
+}
+
 // a=raw&id=N : contenu brut d'une page (blocs)
 if ($a === 'raw') { echo get_post_field('post_content', (int) $_GET['id']); exit; }
 
