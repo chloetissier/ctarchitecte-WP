@@ -118,6 +118,30 @@ body.page .entry-content .wpcf7 p{text-align:left!important;-webkit-hyphens:manu
     <?php
 }, 100);
 
+// Bouton « Appelez-moi » de l'en-tête : sur téléphone le lien tel: ouvre l'appel ;
+// sur ordinateur (souris), le premier clic affiche le numéro à la place du texte.
+add_action('wp_footer', function () {
+    if (is_admin()) { return; }
+    ?>
+<script>
+(function(){
+  if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  document.querySelectorAll('a[href^="tel:"].ast-custom-button-link, .ast-builder-button-wrap a[href^="tel:"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if (a.getAttribute('data-ct-affiche')) return;
+      e.preventDefault();
+      var num = a.getAttribute('href').replace('tel:', '').replace(/^\+33/, '0').replace(/(\d{2})(?=\d)/g, '$1 ');
+      var cible = a.querySelector('.ast-custom-button') || a;
+      cible.textContent = num;
+      a.setAttribute('data-ct-affiche', '1');
+      a.setAttribute('aria-label', 'Numéro de téléphone : ' + num);
+    });
+  });
+})();
+</script>
+    <?php
+}, 100);
+
 // Comparateurs Avant / 3D / Réalisé : toutes les colonnes défilent ensemble
 add_action('wp_footer', function () {
     if (is_admin()) { return; }

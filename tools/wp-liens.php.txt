@@ -53,6 +53,15 @@ function ct_relier(&$b, $map, &$n) {
     foreach ($b['innerBlocks'] as &$ib) { ct_relier($ib, $map, $n); }
 }
 
+if ($a === 'bouton') {
+    $s = get_option('astra-settings');
+    $s['header-button1-text'] = $_GET['t'] ?? 'Appelez-moi';
+    update_option('astra-settings', $s);
+    do_action('litespeed_purge_all');
+    echo "bouton entete -> " . $s['header-button1-text'] . "\n";
+    exit;
+}
+
 if ($a === 'fix') {
     // 1. Boutons sans destination
     foreach ($liens as $id => $map) {
