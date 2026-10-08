@@ -362,6 +362,29 @@ if ($a === 'tarif-cle') {
     exit;
 }
 
+// a=seo-titres : titres Google (Yoast) et meta descriptions orientés recherche locale ; go=1 pour appliquer
+if ($a === 'seo-titres') {
+    $faire = ($_GET['go'] ?? '') === '1';
+    $seo = [
+        109 => ["Architecte d'intérieur à Villefranche, Gleizé et dans le Beaujolais", "Chloé Tissier, architecte d'intérieur qualifiée CFAI à Gleizé, près de Villefranche-sur-Saône. Rénovation, aménagement, plans 3D et suivi de travaux dans le Beaujolais et l'Ouest lyonnais."],
+        115 => ["Chloé Tissier, architecte d'intérieur CFAI dans le Beaujolais", "Architecte d'intérieur qualifiée CFAI installée à Gleizé, Chloé Tissier accompagne particuliers et professionnels dans le Beaujolais, à Villefranche-sur-Saône et dans l'Ouest lyonnais."],
+        119 => ["Prestations d'architecte d'intérieur : conception, 3D, suivi de travaux", "Forfaits Conception (APS, APD, plans d'exécution), Technique (suivi de travaux) et Décoration, ou prestations à la carte. Architecte d'intérieur à Gleizé, Villefranche et dans le Beaujolais."],
+        190 => ["Ma méthode, de la conception à la réception des travaux", "Rendez-vous de découverte, plans, visuels 3D, analyse des devis et suivi de chantier : la méthode de Chloé Tissier, architecte d'intérieur dans le Beaujolais et l'Ouest lyonnais."],
+        111 => ["Questions fréquentes sur l'architecture d'intérieur", "Tarifs, déroulé d'un projet, permis et déclarations, artisans, assurance : les réponses de Chloé Tissier, architecte d'intérieur à Gleizé, près de Villefranche-sur-Saône."],
+        107 => ["Contact : architecte d'intérieur à Gleizé, près de Villefranche", "Parlez-moi de votre projet de rénovation ou d'aménagement : Chloé Tissier, architecte d'intérieur dans le Beaujolais, à Villefranche-sur-Saône, dans l'Ouest lyonnais et à Lyon."],
+    ];
+    foreach ($seo as $id => [$titre, $desc]) {
+        echo "== $id " . get_post_field('post_name', $id) . "\n   avant : " . get_post_meta($id, '_yoast_wpseo_title', true) . " | " . get_post_meta($id, '_yoast_wpseo_metadesc', true) . "\n";
+        echo "   après : $titre (" . mb_strlen($titre) . ") | $desc (" . mb_strlen($desc) . ")\n";
+        if ($faire) {
+            update_post_meta($id, '_yoast_wpseo_title', wp_slash($titre));
+            update_post_meta($id, '_yoast_wpseo_metadesc', wp_slash($desc));
+        }
+    }
+    if ($faire) { do_action('litespeed_purge_all'); echo "APPLIQUE\n"; }
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);

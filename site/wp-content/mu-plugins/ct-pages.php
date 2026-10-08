@@ -329,3 +329,31 @@ add_action('wp_head', function () {
         echo '<script type="application/ld+json">' . wp_json_encode(['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $items], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</script>\n";
     }
 }, 20);
+
+// Données structurées « entreprise locale » (accueil et contact) : adresse, téléphone et zone d'intervention,
+// pour le référencement local (mêmes informations que la fiche Google Business)
+const CT_ZONES = ['Gleizé', 'Villefranche-sur-Saône', 'Anse', 'Beaujolais', 'Ouest lyonnais', 'Lyon'];
+add_action('wp_head', function () {
+    if (is_admin() || !(is_front_page() || is_page('contact'))) { return; }
+    $site = home_url('/');
+    $zones = array_map(function ($z) { return ['@type' => 'Place', 'name' => $z]; }, CT_ZONES);
+    $data = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ProfessionalService',
+        '@id' => $site . '#entreprise',
+        'name' => "CT Architecte d'intérieur",
+        'alternateName' => "Chloé Tissier, architecte d'intérieur",
+        'description' => "Architecte d'intérieur qualifiée CFAI : conception, plans d'exécution et suivi de travaux pour particuliers et professionnels dans le Beaujolais, à Villefranche-sur-Saône et dans l'Ouest lyonnais.",
+        'url' => $site,
+        'telephone' => '+33763987433',
+        'email' => 'contact@ctarchitectedinterieur.fr',
+        'image' => $site . 'wp-content/uploads/2026/05/cropped-cropped-3-ronds-Copie-1.png',
+        'logo' => $site . 'wp-content/uploads/2026/05/cropped-cropped-3-ronds-Copie-1.png',
+        'address' => ['@type' => 'PostalAddress', 'streetAddress' => "57 rue d'Anini", 'postalCode' => '69400', 'addressLocality' => 'Gleizé', 'addressRegion' => 'Auvergne-Rhône-Alpes', 'addressCountry' => 'FR'],
+        'geo' => ['@type' => 'GeoCoordinates', 'latitude' => 45.988244, 'longitude' => 4.697529],
+        'areaServed' => $zones,
+        'founder' => ['@type' => 'Person', 'name' => 'Chloé Tissier', 'jobTitle' => "Architecte d'intérieur qualifiée CFAI"],
+        'knowsAbout' => ["Architecture d'intérieur", 'Rénovation', "Aménagement intérieur", 'Plans 3D', 'Suivi de travaux', 'Décoration'],
+    ];
+    echo '<script type="application/ld+json">' . wp_json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</script>\n";
+}, 21);
