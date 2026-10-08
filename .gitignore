@@ -13,3 +13,4 @@ wp-config.php
 site/wp-content/uploads/
 site/wp-content/cache/
 site/wp-content/litespeed/
+memory/creance-*.md
