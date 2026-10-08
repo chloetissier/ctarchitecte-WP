@@ -190,6 +190,9 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
 @media (max-width:781px){.ct-real h1{font-size:24px}.ct-real .ct-galerie{grid-template-columns:repeat(2,1fr);gap:10px}.ct-real .ct-projet h2{font-size:21px}}
 /* Aucun mot coupé en fin de ligne, sur tout le site */
 html body,html body *{-webkit-hyphens:manual!important;hyphens:manual!important;word-break:normal!important}
+/* Listes à puces : justifiées comme les paragraphes (ordinateur/tablette), à gauche sur mobile */
+@media (min-width:768px){body.page .entry-content li:not([class*="has-text-align"]){text-align:justify}}
+@media (max-width:767px){body.page .entry-content li{text-align:left}}
 /* Toutes les pages : texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone.
    Exclus : textes centrés/alignés, textes des encadrés à icône (Kadence), formulaires, accroches. */
 @media (min-width:768px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text):not(.ct-presta-intro):not(.ct-accroche):not(.ct-rgpd):not(.ct-aide):not(.ct-total){text-align:justify;-webkit-hyphens:manual;hyphens:manual}}
