@@ -2,4 +2,4 @@
 - [Workflow git du site](workflow-git-site.md) — commit + push GitHub à chaque mise à jour, mémoire incluse
 - [Reprise maintenance](reprise-maintenance.md) — où reprendre le chantier (WPForms à relancer, cookies, Astra, PHP)
 - [Délégation gestion du site](delegation-gestion-site.md) — gérer le site sans lui demander, sauf dépenses/contrats/suppressions/design
-- [Créance impayée ancien partenaire](creance-imagine-travaux.md) — 1 150 € impayés, surveiller BODACC
+- [Créance impayée ancien partenaire](creance-imagine-travaux.md) — 1 150 € promis au 15/11/2026, vérifier le paiement
