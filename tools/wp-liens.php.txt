@@ -271,6 +271,25 @@ if ($a === 'presta-plans') {
     exit;
 }
 
+// a=presta-etape2 : Prestations (119) — étape 2 (APD) sur le même modèle que l'étape 1 (intro, 4 puces, conclusion)
+if ($a === 'presta-etape2') {
+    $c = get_post_field('post_content', 119);
+    $nouveau = "<!-- wp:paragraph -->\n<p>Ici, le projet prend vie. Cette étape vous permet de faire les choix essentiels et de vous projeter réellement dans vos futurs espaces :</p>\n<!-- /wp:paragraph -->\n\n"
+      . "<!-- wp:list -->\n<ul class=\"wp-block-list\">"
+      . "<!-- wp:list-item -->\n<li>affiner les plans et l’agencement de chaque pièce</li>\n<!-- /wp:list-item -->\n\n"
+      . "<!-- wp:list-item -->\n<li>visualiser votre futur intérieur grâce aux visuels 3D</li>\n<!-- /wp:list-item -->\n\n"
+      . "<!-- wp:list-item -->\n<li>choisir matériaux, couleurs et mobilier, avec un accompagnement en showroom</li>\n<!-- /wp:list-item -->\n\n"
+      . "<!-- wp:list-item -->\n<li>valider chaque détail en toute confiance avant les travaux</li>\n<!-- /wp:list-item --></ul>\n<!-- /wp:list -->\n\n"
+      . "<!-- wp:paragraph {\"className\":\"ct-conclusion\"} -->\n<p class=\"ct-conclusion\">À l’issue de cette étape, vous disposez de plans 2D détaillés et de visuels 3D : vous savez exactement à quoi ressemblera votre intérieur, comment chaque pièce sera organisée et quels matériaux donneront le ton.</p>\n<!-- /wp:paragraph -->";
+    $c2 = preg_replace('#<!-- wp:paragraph -->\s*<p>Ici, le projet prend vie\.[\s\S]*?<!-- /wp:list -->#u', $nouveau, $c, 1, $n);
+    if (!$n) { exit("passage introuvable, rien modifié\n"); }
+    file_put_contents(dirname(__DIR__) . '/page-119-avant-etape2.txt', $c);
+    wp_update_post(['ID' => 119, 'post_content' => wp_slash($c2)]);
+    do_action('litespeed_purge_all');
+    echo "OK\n";
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);
