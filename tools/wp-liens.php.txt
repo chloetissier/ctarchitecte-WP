@@ -189,6 +189,19 @@ if ($a === 'accueil-blanc') {
     exit;
 }
 
+// a=faq-assurance : ajoute la mention de l'attestation décennale à la réponse « Êtes-vous assurée ? » (page 111)
+if ($a === 'faq-assurance') {
+    $c = get_post_field('post_content', 111);
+    if (strpos($c, 'décennale') !== false) { exit("déjà présent, rien modifié\n"); }
+    file_put_contents(dirname(__DIR__) . '/page-111-avant-assurance.txt', $c);
+    $c2 = preg_replace('/(professionnels de l[\'’]architecture\.)(<\/p>)/u', '$1 Mon attestation d’assurance décennale est disponible sur simple demande.$2', $c, 1, $n);
+    if (!$n) { exit("phrase introuvable, rien modifié\n"); }
+    wp_update_post(['ID' => 111, 'post_content' => wp_slash($c2)]);
+    do_action('litespeed_purge_all');
+    echo "OK : phrase ajoutée\n";
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);
