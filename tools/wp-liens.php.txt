@@ -335,6 +335,33 @@ if ($a === 'apd-definitif') {
     exit;
 }
 
+// a=tarif-cle : repère (et avec go=1 remplace) « 90 € » -> « 100 € » et « clé en main » (exclu par l'assurance Euromaf)
+// sur toutes les pages (publiées, brouillons, privées), widgets Astra compris
+if ($a === 'tarif-cle') {
+    $faire = ($_GET['go'] ?? '') === '1';
+    $motifs = '/(\b90(\s|&nbsp;|\x{202F}|\x{00A0})?(€|euros?)|cl[ée] en mains?|si vous signez le devis)/iu';
+    $remp = [
+        '/\b90((?:\s|&nbsp;|\x{202F}|\x{00A0})?)(€|euros?)/u' => '100$1$2',
+        '/un projet cl[ée] en mains?, l’esprit tranquille/u' => 'un accompagnement complet, l’esprit tranquille',
+        "/un projet cl[ée] en mains?, l'esprit tranquille/u" => "un accompagnement complet, l'esprit tranquille",
+        '/honoraires si vous signez le devis/u' => 'honoraires si vous signez le forfait Conception dans le mois qui suit',
+        '/Cl[ée] en mains?/u' => 'De A à Z',
+        '/cl[ée] en mains?/u' => 'de A à Z',
+    ];
+    foreach (get_posts(['post_type' => ['page', 'post', 'wp_block'], 'post_status' => ['publish', 'draft', 'private', 'pending'], 'numberposts' => -1]) as $p) {
+        $c = $p->post_content;
+        if (!preg_match_all($motifs, $c, $m, PREG_OFFSET_CAPTURE)) { continue; }
+        echo "== {$p->ID} ({$p->post_name}, {$p->post_status})\n";
+        foreach ($m[0] as $x) { echo "   … " . str_replace("\n", ' ', wp_strip_all_tags(substr($c, max(0, $x[1] - 160), 320))) . " …\n"; }
+        $c2 = preg_replace(array_keys($remp), array_values($remp), $c);
+        if ($faire && $c2 !== $c) { file_put_contents(dirname(__DIR__) . "/page-{$p->ID}-avant-tarif.txt", $c); wp_update_post(['ID' => $p->ID, 'post_content' => wp_slash($c2)]); echo "   -> MODIFIE\n"; }
+    }
+    $s = get_option('astra-settings');
+    foreach ($s as $k => $v) { if (is_string($v) && preg_match($motifs, $v)) { echo "astra $k : " . wp_strip_all_tags($v) . "\n"; } }
+    if ($faire) { do_action('litespeed_purge_all'); echo "APPLIQUE\n"; }
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);
