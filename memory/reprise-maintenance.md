@@ -59,4 +59,4 @@ Choix typographique global (2026-09-29, demandé par elle) : paragraphes justifi
 **Why:** reprendre sans refaire l'état des lieux.
 **How to apply:** relire ce fichier en début de session, vérifier l'état serveur avant d'agir ; supprimer ce fichier quand tout est terminé.
 
-- 2026-10-08 : ancien site Wix chloetissier3.wixsite.com/chloetissier à faire disparaître de Google — c'est à elle de le dépublier/supprimer dans son compte Wix (je n'ai pas accès), puis demande via l'outil Google « Supprimer du contenu obsolète ». CGV relues le 2026-10-08 (nouvelle numérotation 1-16), dernières corrections proposées.
+- 2026-10-08 : ancien site Wix chloetissier3.wixsite.com/chloetissier à faire disparaître de Google — supprimé par elle (404) et demande de retrait envoyée à Google le 2026-10-08 (outil contenu obsolète, 1re option « page modifiée »). Vérifier dans quelques jours que la recherche ne le montre plus. CGV relues le 2026-10-08 (nouvelle numérotation 1-16), dernières corrections proposées.
