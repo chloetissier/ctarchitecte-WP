@@ -148,6 +148,47 @@ if ($a === 'accueil-publics') {
     exit;
 }
 
+// Accueil : fonds blancs SAUF la 1re rangée (photo d'en-tête), sous-titres de l'en-tête en paragraphes,
+// bas de page remplacé par l'encadré commun
+function ct_accueil($content) {
+    $cta = parse_blocks(file_get_contents(dirname(__DIR__) . '/legal/cta-accueil.html'));
+    $out = []; $premiere = true;
+    foreach (parse_blocks($content) as $b) {
+        if ($b['blockName'] === 'kadence/rowlayout') {
+            $txt = serialize_block($b);
+            if ($premiere) { $premiere = false; $out[] = $b; continue; } // en-tête conservé tel quel
+            if (strpos($txt, 'Et si votre projet prenait vie') !== false) { echo "rangée titre du bas retirée\n"; continue; }
+            if (strpos($txt, 'Découvrez mes prestations à la carte') !== false) { foreach ($cta as $p) { if ($p['blockName']) { $out[] = $p; } } echo "boutons du bas remplacés par l'encadré\n"; continue; }
+            $b['attrs']['bgColor'] = '';
+        }
+        if ($b['blockName'] === 'core/paragraph' && trim(wp_strip_all_tags($b['innerHTML'])) === '') { continue; } // paragraphe vide final
+        $out[] = $b;
+    }
+    $c = serialize_blocks($out);
+    // Sous-titre et accroche de l'en-tête : paragraphes (ce ne sont pas des titres de section)
+    $c = preg_replace('#<!-- wp:heading \{[^\n]*?\} -->\s*<h([23]) [^>]*>(Professionnels ou particuliers[^<]*)</h\1>\s*<!-- /wp:heading -->#u',
+        "<!-- wp:paragraph {\"className\":\"ct-hero-sous-titre\"} -->\n<p class=\"ct-hero-sous-titre\">$2</p>\n<!-- /wp:paragraph -->", $c, 1, $n1);
+    $c = preg_replace('#<!-- wp:heading \{[^\n]*?\} -->\s*<h([23]) [^>]*>(Révélez le potentiel de vos espaces[^<]*)</h\1>\s*<!-- /wp:heading -->#u',
+        "<!-- wp:paragraph {\"className\":\"ct-hero-accroche\"} -->\n<p class=\"ct-hero-accroche\">$2</p>\n<!-- /wp:paragraph -->", $c, 1, $n2);
+    echo "en-tête : sous-titre converti=$n1, accroche convertie=$n2\n";
+    return $c;
+}
+
+// a=accueil-blanc : aperçu caché de l'accueil transformé
+if ($a === 'accueil-blanc') {
+    $c = ct_accueil(get_post_field('post_content', 109));
+    $slug = 'apercu-accueil';
+    $page = get_page_by_path($slug);
+    $d = ['post_title' => 'Accueil', 'post_name' => $slug, 'post_content' => $c, 'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'closed'];
+    if ($page) { $d['ID'] = $page->ID; }
+    $id = $page ? wp_update_post(wp_slash($d)) : wp_insert_post(wp_slash($d));
+    update_post_meta($id, '_yoast_wpseo_meta-robots-noindex', '1');
+    foreach (get_post_meta(109) as $m => $v) { if (strpos($m, '_yoast') === 0 || $m === '_edit_lock' || $m === '_edit_last') { continue; } update_post_meta($id, $m, maybe_unserialize($v[0])); }
+    do_action('litespeed_purge_all');
+    echo "APERCU id=$id " . get_permalink($id) . "\n";
+    exit;
+}
+
 // a=methode-publier : applique la version validée à la vraie page Méthode (190), supprime l'aperçu
 if ($a === 'methode-publier') {
     $avant = get_post_field('post_content', 190);

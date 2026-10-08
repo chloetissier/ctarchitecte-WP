@@ -123,7 +123,10 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
 }/* Cartes vertes : même espace entre titre et texte partout */
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-title{margin:4px 0 10px!important}
 :is(.kt-has-4-columns,.kt-has-5-columns) .kt-blocks-info-box-text{margin-top:0!important}
-/* Phrase de conclusion (bordeaux, taille du texte) sur toutes les pages */
+/* En-tête de l'accueil : sous-titre (brun) et accroche (bordeaux), alignés sur le titre */
+.entry-content .ct-hero-sous-titre{padding:0 var(--wp--preset--spacing--40);font-size:18px;line-height:1.6;color:#382A25;font-weight:500;margin:8px 0 12px;text-align:left!important}
+.entry-content .ct-hero-accroche{padding:0 var(--wp--preset--spacing--40);font-size:20px;line-height:1.4;color:#843A45;font-weight:600;margin:0 0 4px;text-align:left!important}
+@media (max-width:781px){.entry-content .ct-hero-sous-titre{font-size:16px}.entry-content .ct-hero-accroche{font-size:18px}}/* Phrase de conclusion (bordeaux, taille du texte) sur toutes les pages */
 .entry-content .ct-conclusion{color:#843A45;font-weight:600;font-size:17px}
 /* Mobile : rythme vertical régulier entre les sections (sauf la 1re rangée, ex. photo d'en-tête) */
 @media (max-width:767px){
