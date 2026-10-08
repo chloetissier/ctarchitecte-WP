@@ -215,6 +215,19 @@ if ($a === 'faq-assurance2') {
     exit;
 }
 
+// a=ml-decennale : mentions légales (194) — assurance RC pro ET garantie décennale
+if ($a === 'ml-decennale') {
+    $c = get_post_field('post_content', 194);
+    if (strpos($c, 'garantie décennale') !== false) { exit("déjà présent, rien modifié\n"); }
+    file_put_contents(dirname(__DIR__) . '/page-194-avant-decennale.txt', $c);
+    $c2 = preg_replace('/Assurance responsabilité civile professionnelle(\s*):/u', 'Assurance responsabilité civile professionnelle et garantie décennale$1:', $c, 1, $n);
+    if (!$n) { exit("phrase introuvable, rien modifié\n"); }
+    wp_update_post(['ID' => 194, 'post_content' => wp_slash($c2)]);
+    do_action('litespeed_purge_all');
+    echo "OK\n";
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);

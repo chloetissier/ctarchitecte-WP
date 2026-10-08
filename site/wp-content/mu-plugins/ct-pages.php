@@ -193,6 +193,8 @@ html body,html body *{-webkit-hyphens:manual!important;hyphens:manual!important;
 /* Listes à puces : justifiées comme les paragraphes (ordinateur/tablette), à gauche sur mobile */
 @media (min-width:768px){body.page .entry-content li:not([class*="has-text-align"]){text-align:justify}}
 @media (max-width:767px){body.page .entry-content li{text-align:left}}
+/* Encadrés beiges dans le texte : espace avant et après (ex. politique de confidentialité, mentions légales) */
+body.page .entry-content .wp-block-group.has-background{margin-top:24px;margin-bottom:36px}
 /* Toutes les pages : texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone.
    Exclus : textes centrés/alignés, textes des encadrés à icône (Kadence), formulaires, accroches. */
 @media (min-width:768px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text):not(.ct-presta-intro):not(.ct-accroche):not(.ct-rgpd):not(.ct-aide):not(.ct-total){text-align:justify;-webkit-hyphens:manual;hyphens:manual}}
