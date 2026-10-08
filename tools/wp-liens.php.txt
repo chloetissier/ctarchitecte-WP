@@ -228,6 +228,20 @@ if ($a === 'ml-decennale') {
     exit;
 }
 
+// a=realisations-attente : contenu d'attente sur la vraie page Réalisations (113), qui RESTE masquée à Google
+if ($a === 'realisations-attente') {
+    $avant = get_post_field('post_content', 113);
+    if (trim($avant) !== '') { file_put_contents(dirname(__DIR__) . '/page-113-avant-attente.txt', $avant); }
+    $c = file_get_contents(dirname(__DIR__) . '/legal/realisations-attente.html');
+    $r = wp_update_post(['ID' => 113, 'post_content' => wp_slash($c)], true);
+    if (is_wp_error($r)) { exit('ERR ' . $r->get_error_message()); }
+    update_post_meta(113, 'site-post-title', 'disabled');               // le contenu a déjà son titre
+    update_post_meta(113, '_yoast_wpseo_meta-robots-noindex', '1');     // page d'attente : pas dans Google
+    do_action('litespeed_purge_all');
+    echo "OK " . get_permalink(113) . "\n";
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);
