@@ -385,6 +385,88 @@ if ($a === 'seo-titres') {
     exit;
 }
 
+// a=zones : ajoute la section « Où j'interviens » (fichier /home/ctarchq/zones.html) avant l'encadré final de l'accueil
+// et sous le formulaire de contact ; go=1 pour appliquer (sans doublon)
+if ($a === 'zones') {
+    $faire = ($_GET['go'] ?? '') === '1';
+    $bloc = trim(file_get_contents(dirname(__DIR__) . '/zones.html'));
+    foreach ([109, 107] as $id) {
+        $c = get_post_field('post_content', $id);
+        if (strpos($c, 'ct-zones') !== false) { echo "$id : déjà présent\n"; continue; }
+        if ($id === 109) {
+            $pos = strrpos($c, "<!-- wp:html -->\n<div class=\"ct-cta\">");
+            if ($pos === false) { echo "109 : encadré final introuvable\n"; continue; }
+            $c2 = substr($c, 0, $pos) . $bloc . "\n\n" . substr($c, $pos);
+        } else {
+            $b = str_replace('<a href="/contact/">Contactez-moi</a>, nous en parlerons volontiers', 'Écrivez-moi, nous en parlerons volontiers', $bloc);
+            $c2 = rtrim($c) . "\n\n" . $b . "\n";
+        }
+        echo "$id : insertion OK (" . strlen($c) . " -> " . strlen($c2) . ")\n";
+        if ($faire) { file_put_contents(dirname(__DIR__) . "/page-$id-avant-zones.txt", $c); wp_update_post(['ID' => $id, 'post_content' => wp_slash($c2)]); }
+    }
+    if ($faire) { do_action('litespeed_purge_all'); echo "APPLIQUE\n"; }
+    exit;
+}
+
+// a=article : crée (ou met à jour) l'article de conseils depuis /home/ctarchq/article.html, catégorie « Conseils »,
+// en noindex tant qu'elle ne l'a pas validé (a=article-publier pour retirer le noindex)
+if ($a === 'article') {
+    $slug = 'architecte-interieur-ou-decorateur';
+    $cat = term_exists('Conseils', 'category') ?: wp_insert_term('Conseils', 'category', ['slug' => 'conseils']);
+    $data = [
+        'post_type' => 'post', 'post_status' => 'publish', 'post_name' => $slug,
+        'post_title' => "Architecte d'intérieur ou décorateur : quelle différence ?",
+        'post_content' => wp_slash(file_get_contents(dirname(__DIR__) . '/article.html')),
+        'post_excerpt' => "Décorateur ou architecte d'intérieur : deux métiers souvent confondus. Leurs différences, et comment choisir le bon interlocuteur pour votre projet.",
+        'post_category' => [(int) (is_array($cat) ? $cat['term_id'] : $cat)],
+    ];
+    $p = get_page_by_path($slug, OBJECT, 'post');
+    if ($p) { $data['ID'] = $p->ID; $id = wp_update_post($data, true); } else { $id = wp_insert_post($data, true); }
+    if (is_wp_error($id)) { exit('ERR ' . $id->get_error_message()); }
+    if (!$p) { update_post_meta($id, '_yoast_wpseo_meta-robots-noindex', '1'); }
+    update_post_meta($id, '_yoast_wpseo_title', "Architecte d'intérieur ou décorateur : quelle différence ?");
+    update_post_meta($id, '_yoast_wpseo_metadesc', wp_slash("Décorateur ou architecte d'intérieur ? Rôles, différences et conseils pour bien choisir, par Chloé Tissier, architecte d'intérieur CFAI à Gleizé, dans le Beaujolais."));
+    do_action('litespeed_purge_all');
+    echo "ARTICLE $id " . get_permalink($id) . " noindex=" . get_post_meta($id, '_yoast_wpseo_meta-robots-noindex', true) . "\n";
+    exit;
+}
+// a=articles-reglages : liste les réglages Astra des articles ; go=1 : fond blanc (sans boîte), commentaires fermés,
+// nom d'autrice affiché « Chloé Tissier » si vide
+if ($a === 'articles-reglages') {
+    $faire = ($_GET['go'] ?? '') === '1';
+    $s = get_option('astra-settings');
+    foreach ($s as $k => $v) { if (preg_match('/single-post|content-style|content-layout|blog-single/', $k)) { echo "$k = " . (is_scalar($v) ? $v : json_encode($v)) . "\n"; } }
+    $p = get_page_by_path('architecte-interieur-ou-decorateur', OBJECT, 'post');
+    $admins = get_users(['role' => 'administrator', 'orderby' => 'ID']);
+    foreach ($admins as $ad) { echo "admin {$ad->ID} login={$ad->user_login} display=[{$ad->display_name}] prenom=[{$ad->first_name}] nom=[{$ad->last_name}]\n"; }
+    $u = $admins[0];
+    echo "commentaires par défaut : " . get_option('default_comment_status') . "\n";
+    if ($faire) {
+        $s['single-post-content-style'] = 'unboxed';
+        $s['ast-dynamic-single-post-metadata'] = ['date'];
+        update_option('astra-settings', $s);
+        update_post_meta($p->ID, 'site-content-style', 'unboxed');
+        wp_update_post(['ID' => $p->ID, 'post_author' => $u->ID, 'comment_status' => 'closed', 'ping_status' => 'closed']);
+        update_option('default_comment_status', 'closed');
+        update_option('default_ping_status', 'closed');
+        // nom public = Chloé Tissier (au lieu de l'identifiant de connexion, qui ne doit pas apparaître sur le site)
+        if ($u->display_name === $u->user_login) { wp_update_user(['ID' => $u->ID, 'display_name' => 'Chloé Tissier', 'first_name' => 'Chloé', 'last_name' => 'Tissier', 'nickname' => 'Chloé Tissier']); }
+        // pas de page « auteur » (révèle l'identifiant dans l'adresse) : Yoast la redirige vers l'accueil
+        $ty = get_option('wpseo_titles'); $ty['disable-author'] = true; update_option('wpseo_titles', $ty);
+        do_action('litespeed_purge_all');
+        echo "APPLIQUE\n";
+    }
+    exit;
+}
+if ($a === 'article-publier') {
+    $p = get_page_by_path('architecte-interieur-ou-decorateur', OBJECT, 'post');
+    if (!$p) { exit("introuvable\n"); }
+    delete_post_meta($p->ID, '_yoast_wpseo_meta-robots-noindex');
+    do_action('litespeed_purge_all');
+    echo "INDEXABLE " . get_permalink($p->ID) . "\n";
+    exit;
+}
+
 // a=accueil-publier : applique la version validée à la vraie page d'accueil (109), supprime l'aperçu
 if ($a === 'accueil-publier') {
     $avant = get_post_field('post_content', 109);

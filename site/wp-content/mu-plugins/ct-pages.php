@@ -191,18 +191,33 @@ body .entry-content .ct-faq .ct-faq-theme{font-size:15px!important;font-weight:7
 /* Aucun mot coupé en fin de ligne, sur tout le site */
 html body,html body *{-webkit-hyphens:manual!important;hyphens:manual!important;word-break:normal!important}
 /* Listes à puces : justifiées comme les paragraphes (ordinateur/tablette), à gauche sur mobile */
-@media (min-width:768px){body.page .entry-content li:not([class*="has-text-align"]){text-align:justify}}
-@media (max-width:767px){body.page .entry-content li{text-align:left}}
+@media (min-width:768px){:is(body.page,body.single-post) .entry-content li:not([class*="has-text-align"]){text-align:justify}}
+@media (max-width:767px){:is(body.page,body.single-post) .entry-content li{text-align:left}}
 /* Encadrés beiges dans le texte : espace avant et après (ex. politique de confidentialité, mentions légales) */
 body.page .entry-content .wp-block-group.has-background{margin-top:24px;margin-bottom:36px}
 /* Toutes les pages : texte justifié sur ordinateur et tablette (avec coupure des mots), aligné à gauche sur téléphone.
    Exclus : textes centrés/alignés, textes des encadrés à icône (Kadence), formulaires, accroches. */
-@media (min-width:768px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text):not(.ct-presta-intro):not(.ct-accroche):not(.ct-rgpd):not(.ct-aide):not(.ct-total){text-align:justify;-webkit-hyphens:manual;hyphens:manual}}
-@media (max-width:767px){body.page .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text){text-align:left;-webkit-hyphens:manual;hyphens:manual}}
+@media (min-width:768px){:is(body.page,body.single-post) .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text):not(.ct-presta-intro):not(.ct-accroche):not(.ct-rgpd):not(.ct-aide):not(.ct-total){text-align:justify;-webkit-hyphens:manual;hyphens:manual}}
+@media (max-width:767px){:is(body.page,body.single-post) .entry-content p:not([class*="has-text-align"]):not(.kt-blocks-info-box-text){text-align:left;-webkit-hyphens:manual;hyphens:manual}}
 body.page .entry-content .wpcf7 p{text-align:left!important;-webkit-hyphens:manual!important;hyphens:manual!important}
 @media (max-width:781px){.ct-presta h1{font-size:24px}.ct-presta .ct-bande{padding:24px 20px}.ct-presta .ct-bande .wp-block-columns{gap:8px}}
 @media (max-width:781px){.ct-apropos-haut{gap:32px;margin-bottom:56px!important}.ct-apropos h2{margin-top:56px}.ct-apropos h1{font-size:24px}}
 @media (max-width:600px){.ct-faq .ct-faq-q{font-size:18px}.ct-faq .ct-faq-theme{font-size:13px}}
+/* Section « Où j'interviens » (accueil, contact) */
+.ct-zones{margin-top:56px}
+.ct-zones h2{text-align:center}
+/* Page Contact : section alignée à gauche, même largeur que le formulaire */
+body.page-id-107 .ct-zones > *{margin-left:0!important;max-width:770px}
+body.page-id-107 .ct-zones h2{text-align:left}
+/* Articles de conseils : chapô, tableau comparatif à la charte */
+.ct-article-chapo{font-size:18px;font-weight:500}
+.entry-content .ct-article,body.page-id-107 .entry-content .ct-zones{padding-left:0!important;padding-right:0!important}
+.ct-tableau{margin:24px 0 32px;box-shadow:none!important;overflow-x:auto}
+.ct-tableau table{border-collapse:collapse;width:100%;font-size:16px}
+.ct-tableau th{background:#E7E1DC;color:#382A25;font-weight:600;padding:12px;border:1px solid #E7E1DC}
+.ct-tableau td{padding:10px 12px;border:1px solid #E7E1DC;color:#382A25;text-align:center}
+.ct-tableau td:first-child{text-align:left}
+@media (max-width:600px){.ct-tableau table{font-size:14px}.ct-tableau th,.ct-tableau td{padding:8px 6px}}
 </style>
     <?php
 }, 100);
@@ -332,7 +347,10 @@ add_action('wp_head', function () {
 
 // Données structurées « entreprise locale » (accueil et contact) : adresse, téléphone et zone d'intervention,
 // pour le référencement local (mêmes informations que la fiche Google Business)
-const CT_ZONES = ['Gleizé', 'Villefranche-sur-Saône', 'Anse', 'Beaujolais', 'Ouest lyonnais', 'Lyon'];
+// (liste de sa fiche Google Business + ajouts du 2026-10-27)
+const CT_ZONES = ['Gleizé', 'Villefranche-sur-Saône', 'Anse', 'Arnas', 'Limas', 'Liergues', 'Lucenay',
+    'Tassin-la-Demi-Lune', 'Charbonnières-les-Bains', "Marcy-l'Étoile", 'Saint-Genis-les-Ollières', 'Craponne',
+    'Grézieu-la-Varenne', 'Brindas', 'Messimy', 'Chaponost', 'Pollionnay', 'Lentilly', 'Beaujolais', 'Ouest lyonnais', 'Lyon'];
 add_action('wp_head', function () {
     if (is_admin() || !(is_front_page() || is_page('contact'))) { return; }
     $site = home_url('/');

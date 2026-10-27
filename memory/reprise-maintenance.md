@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7feebee1-03ec-41c4-92f2-49f9797adff6
-  modified: 2026-10-01T10:17:33.435Z
+  modified: 2026-10-27T15:20:45.880Z
 ---
 
 Chantier [[site-wordpress-ovh]] — état au 2026-09-29 ~11h30.
@@ -60,4 +60,5 @@ Choix typographique global (2026-09-29, demandé par elle) : paragraphes justifi
 **How to apply:** relire ce fichier en début de session, vérifier l'état serveur avant d'agir ; supprimer ce fichier quand tout est terminé.
 
 - 2026-10-08 : ancien site Wix chloetissier3.wixsite.com/chloetissier à faire disparaître de Google — supprimé par elle (404) et demande de retrait envoyée à Google le 2026-10-08 (outil contenu obsolète, 1re option « page modifiée »). Vérifier dans quelques jours que la recherche ne le montre plus. CGV relues le 2026-10-08 (nouvelle numérotation 1-16), dernières corrections proposées.
+- SEO local (2026-10-27) : 18 villes reçues (fiche Google + Liergues, Lucenay, Messimy, Chaponost, Charbonnières, Tassin) → CT_ZONES complété ; section « Où j'interviens » (contenus/zones.html, encadré beige) EN LIGNE sur accueil 109 (avant l'encadré final) et contact 107 (sous le formulaire ; anciens contenus /home/ctarchq/page-10x-avant-zones.txt). 1er article de conseils « Architecte d'intérieur ou décorateur : quelle différence ? » = article 426, /architecte-interieur-ou-decorateur/, catégorie Conseils, EN NOINDEX en attente de sa relecture (puis action a=article-publier). Réglages articles : fond blanc (single-post-content-style unboxed), méta = date seule, commentaires fermés partout, nom public de l'admin = « Chloé Tissier » (avant : identifiant de connexion affiché), pages auteur désactivées (Yoast). À proposer ensuite : page/entrée de menu « Conseils » listant les articles (changement visible → son accord), image à la une, 1 article/mois (sujets proposés : coût d'un archi d'intérieur dans le Beaujolais, maison en pierres dorées, cuisine ouverte, permis/DP).
 - SEO local (2026-10-08) : titres Google + meta descriptions Yoast posés sur 109/115/119/190/111/107 (action a=seo-titres, sans nom du site dans le titre) ; JSON-LD ProfessionalService (adresse Gleizé, géo, tél, areaServed = constante CT_ZONES) sur accueil + contact (ct-pages.php ; ancienne version /home/ctarchq/ct-pages-avant-seo.php). EN ATTENTE d'elle : liste exacte des 11 villes de sa fiche Google (→ compléter CT_ZONES) + accord pour une section visible « Où j'interviens » (accueil + contact). Lui rappeler : avis Google clients, demande d'indexation Search Console, annuaires (PagesJaunes, Houzz, annuaire CFAI) avec nom/adresse/tél identiques.
