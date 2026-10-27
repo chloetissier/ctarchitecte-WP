@@ -218,6 +218,20 @@ body.page-id-107 .ct-zones h2{text-align:left}
 .ct-tableau td{padding:10px 12px;border:1px solid #E7E1DC;color:#382A25;text-align:center}
 .ct-tableau td:first-child{text-align:left}
 @media (max-width:600px){.ct-tableau table{font-size:14px}.ct-tableau th,.ct-tableau td{padding:8px 6px}}
+/* Page Conseils : cartes d'articles vert pastel, image arrondie en haut */
+.ct-articles{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:32px;margin:32px 0 48px}
+.ct-carte-article{background:#D4D9D0;border-radius:30px;overflow:hidden;display:flex;flex-direction:column}
+.ct-carte-image img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:0}
+.ct-carte-texte{padding:24px;display:flex;flex-direction:column;flex:1}
+.entry-content .ct-carte-texte h2{font-size:20px!important;margin:0 0 12px}
+.entry-content .ct-carte-texte h2 a{color:#843A45;text-decoration:none!important}
+.entry-content .ct-carte-texte p{text-align:left!important;margin:0 0 20px;flex:1}
+.entry-content .ct-carte-texte .ct-lire{align-self:flex-start;color:#843A45;font-weight:600;text-decoration:none!important}
+.entry-content .ct-carte-texte .ct-lire:hover,.entry-content .ct-carte-texte h2 a:hover{text-decoration:underline!important}
+.ct-article-image{margin:0 0 32px}
+.ct-article-image img{display:block;width:100%;height:auto;border-radius:24px;box-shadow:none!important}
+/* Article : image à la une arrondie comme les autres photos du site */
+.single-post .post-thumb-img-content img,.single-post .ast-single-post-featured-section img{border-radius:24px}
 </style>
     <?php
 }, 100);
@@ -344,6 +358,30 @@ add_action('wp_head', function () {
         echo '<script type="application/ld+json">' . wp_json_encode(['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $items], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</script>\n";
     }
 }, 20);
+
+// [ct_articles] : grille des articles de conseils (page Conseils), cartes vert pastel à la charte
+add_shortcode('ct_articles', function () {
+    $q = new WP_Query(['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 30, 'ignore_sticky_posts' => true]);
+    if (!$q->have_posts()) { return '<p>Les premiers articles arrivent bientôt.</p>'; }
+    $h = '<div class="ct-articles">';
+    while ($q->have_posts()) {
+        $q->the_post();
+        $lien = esc_url(get_permalink());
+        $h .= '<article class="ct-carte-article">';
+        if (has_post_thumbnail()) { $h .= '<a class="ct-carte-image" href="' . $lien . '" tabindex="-1">' . get_the_post_thumbnail(null, 'medium_large', ['loading' => 'lazy']) . '</a>'; }
+        $h .= '<div class="ct-carte-texte"><h2><a href="' . $lien . '">' . esc_html(get_the_title()) . '</a></h2>'
+            . '<p>' . esc_html(get_the_excerpt()) . '</p>'
+            . '<a class="ct-lire" href="' . $lien . '">Lire l’article →</a></div></article>';
+    }
+    wp_reset_postdata();
+    return $h . '</div>';
+});
+
+// Articles : photo à la une affichée en tête du texte (le thème ne l'affiche pas)
+add_filter('the_content', function ($c) {
+    if (!is_singular('post') || !in_the_loop() || !is_main_query() || !has_post_thumbnail()) { return $c; }
+    return '<figure class="ct-article-image">' . get_the_post_thumbnail(null, 'large', ['loading' => 'eager', 'data-no-lazy' => '1']) . '</figure>' . $c;
+}, 5);
 
 // Données structurées « entreprise locale » (accueil et contact) : adresse, téléphone et zone d'intervention,
 // pour le référencement local (mêmes informations que la fiche Google Business)

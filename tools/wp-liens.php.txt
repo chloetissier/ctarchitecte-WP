@@ -470,6 +470,48 @@ if ($a === 'article-retouche') {
     if (($_GET['go'] ?? '') === '1' && $n) { wp_update_post(['ID' => $p->ID, 'post_content' => wp_slash($c2)]); do_action('litespeed_purge_all'); echo "APPLIQUE\n"; }
     exit;
 }
+// a=medias : images de la médiathèque (pour choisir les photos d'articles) + menus et emplacements
+if ($a === 'medias') {
+    foreach (get_posts(['post_type' => 'attachment', 'post_mime_type' => 'image', 'numberposts' => -1, 'orderby' => 'ID', 'order' => 'ASC']) as $m) {
+        $meta = wp_get_attachment_metadata($m->ID);
+        echo "{$m->ID} | {$m->post_title} | " . basename(get_attached_file($m->ID)) . " | " . ($meta['width'] ?? '?') . "x" . ($meta['height'] ?? '?') . " | parent {$m->post_parent}\n";
+    }
+    echo "emplacements : " . json_encode(get_nav_menu_locations()) . "\n";
+    foreach (wp_get_nav_menus() as $menu) {
+        echo "menu {$menu->term_id} {$menu->name} :";
+        foreach (wp_get_nav_menu_items($menu->term_id) as $it) { echo " [{$it->ID} ordre {$it->menu_order} {$it->title} -> {$it->url}]"; }
+        echo "\n";
+    }
+    exit;
+}
+// a=conseils : page « Conseils » (liste des articles, depuis /home/ctarchq/conseils.html), onglet de menu après FAQ,
+// image à la une de l'article décorateur (média 269, visuel 3D du Studio)
+if ($a === 'conseils') {
+    $page = get_page_by_path('conseils');
+    $data = ['post_type' => 'page', 'post_status' => 'publish', 'post_name' => 'conseils', 'post_title' => 'Conseils',
+             'post_content' => wp_slash(file_get_contents(dirname(__DIR__) . '/conseils.html'))];
+    if ($page) { $data['ID'] = $page->ID; $id = wp_update_post($data, true); } else { $id = wp_insert_post($data, true); }
+    if (is_wp_error($id)) { exit('ERR ' . $id->get_error_message()); }
+    update_post_meta($id, 'site-post-title', 'disabled');
+    update_post_meta($id, '_yoast_wpseo_title', "Conseils d'architecte d'intérieur – Beaujolais et Ouest lyonnais");
+    update_post_meta($id, '_yoast_wpseo_metadesc', wp_slash("Rénovation, aménagement, décoration : les conseils de Chloé Tissier, architecte d'intérieur qualifiée CFAI à Gleizé, pour préparer votre projet dans le Beaujolais et l'Ouest lyonnais."));
+    echo "PAGE $id " . get_permalink($id) . "\n";
+    // onglet de menu entre FAQ et Contact (menu 18 = principal, mobile et pied de page)
+    $existe = false;
+    foreach (wp_get_nav_menu_items(18) as $it) { if ((int) $it->object_id === $id) { $existe = true; } }
+    if (!$existe) {
+        foreach (wp_get_nav_menu_items(18) as $it) {
+            if ($it->menu_order >= 7) { wp_update_post(['ID' => $it->ID, 'menu_order' => $it->menu_order + 1]); }
+        }
+        $r = wp_update_nav_menu_item(18, 0, ['menu-item-title' => 'Conseils', 'menu-item-object' => 'page', 'menu-item-object-id' => $id,
+            'menu-item-type' => 'post_type', 'menu-item-status' => 'publish', 'menu-item-position' => 7]);
+        echo is_wp_error($r) ? 'ERR menu ' . $r->get_error_message() . "\n" : "menu : onglet ajouté ($r)\n";
+    } else { echo "menu : déjà présent\n"; }
+    $art = get_page_by_path('architecte-interieur-ou-decorateur', OBJECT, 'post');
+    if ($art) { set_post_thumbnail($art->ID, 269); echo "image à la une : 269\n"; }
+    do_action('litespeed_purge_all');
+    exit;
+}
 if ($a === 'article-publier') {
     $p = get_page_by_path('architecte-interieur-ou-decorateur', OBJECT, 'post');
     if (!$p) { exit("introuvable\n"); }
